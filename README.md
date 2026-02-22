@@ -1,2 +1,3 @@
 # Calculator-2
-The Undisputable Greatest Calculator Created Within 200KB.
+A Powerfully Engineered Calculator In A Single File.
+# Web Version
