@@ -27,3 +27,20 @@ A Powerfully Engineered Calculator In A Single File. Courtesy To Claude 4.6
 > Includes tools for definite and indefinite integration using numerical methods.
 #### Differential Equations (ODEs)
 > A dedicated section for solving ordinary differential equations.
+## Linear Algebra (Matrices & Vectors)
+#### Matrix Suite
+> Tools for matrix operations including calculating the determinant, finding the inverse, and general matrix arithmetic using an interactive grid.
+#### Vector Operations
+> Functions for vector-specific math, such as dot products and cross products.
+## Data Science & Graphing
+#### QR Grapher
+> An "advanced hybrid" feature that generates a visual graph of a function and produces a QR Code that can be scanned to open the full interactive graph on a mobile device.
+#### Statistics
+> Handles frequency tables, normal and binomial distributions, and statistical inference.
+#### Regression Analysis
+> Supports linear, exponential, and logarithmic regression models to find trends in data points.
+## Specialized Number Tools
+#### Complex Numbers
+> Full complex arithmetic including addition, subtraction, multiplication, division, and finding complex roots.
+#### Number Theory
+> Tools for primality testing, factorization, Fibonacci sequences, GCD/LCM, and permutations/combinations ($nCr$, $nPr$).
