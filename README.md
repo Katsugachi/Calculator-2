@@ -1,5 +1,5 @@
 # Calculator-2
-The Refined Swiss Army Knife Of Calculators <br>
+The Swiss Army Knife Of Calculators <br>
 Newest Calculator Major Update Since 1961's ANITA MK-8 <br>
 > Courtesy To Claude 4.6
 # Web Version
@@ -8,7 +8,14 @@ Newest Calculator Major Update Since 1961's ANITA MK-8 <br>
 > Download Through Code > Download ZIP <br>
 > Extract All<br>
 > Open `index.html` and it should open right in your browser<br>
-# About & Details
+# Repository Details
+## Details 
+![GitHub Repo Size](https://img.shields.io/github/repo-size/Katsugachi/Calculator-2) <br>
+![GitHub License](https://img.shields.io/github/license/Katsugachi/Calculator-2) <br>
+![GitHub Last Commit](https://img.shields.io/github/last-commit/Katsugachi/Calculator-2) <br>
+![GitHub Stars](https://img.shields.io/github/stars/Katsugachi/Calculator-2?style=social)
+
+# About & Specs
 #### Standard Mode
 > Familiar normal calculator for most calculations. Simple and easy to use.
 #### Scientifc Mode
