@@ -1,5 +1,7 @@
 # Calculator-2
-A Powerfully Engineered Calculator In A Single File. Courtesy To Claude 4.6
+The Refined Swiss Army Knife Of Calculators <br>
+Newest Calculator Major Update Since 1961's ANITA MK-8 <br>
+> Courtesy To Claude 4.6
 # Web Version
 [![Launch](https://img.shields.io/badge/Launch-Calculator%202-blue?style=for-the-badge)](https://katsugachi.github.io/Calculator-2/)
 ## Download The Calculator
@@ -44,3 +46,16 @@ A Powerfully Engineered Calculator In A Single File. Courtesy To Claude 4.6
 > Full complex arithmetic including addition, subtraction, multiplication, division, and finding complex roots.
 #### Number Theory
 > Tools for primality testing, factorization, Fibonacci sequences, GCD/LCM, and permutations/combinations ($nCr$, $nPr$).
+#### Base Converter
+> Converts numbers between different bases (e.g., binary, octal, decimal, hex).
+#### Physical Constants
+> A built-in library of common scientific and physical constants for use in calculations.
+## Conversion & Applied Models
+#### Unit Conversion
+> Comprehensive conversion for various physical units (length, mass, etc.).
+#### Currency Conversion
+> A built-in currency converter with initialization logic for exchange rates.
+#### Time Calculations
+> Features for date and time-based math.
+#### Applied Models
+> Pre-configured models for specialized scientific tasks, such as Newton’s Law of Cooling and Population Growth modeling.
