@@ -23,29 +23,33 @@ body{font-family:'Inter',system-ui,sans-serif;background:#fff;color:#111;display
 .nav-item svg{flex-shrink:0;opacity:0.4}
 .nav-item:hover{background:#f0f0f0;color:#111}.nav-item:hover svg{opacity:0.7}
 .nav-item.active{background:#ebebeb;color:#111;border-left-color:#111;font-weight:500}.nav-item.active svg{opacity:1}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.panel{display:none;flex-direction:column;height:100%;overflow:hidden}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;container-type:inline-size}
+.panel{display:none;flex-direction:column;height:100%;overflow:hidden;container-type:inline-size}
 .panel.active{display:flex;animation:fi 0.12s ease}
 @keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
-.std-wrap{display:flex;flex-direction:column;height:100%;max-width:352px;margin:0 auto;width:100%;padding:14px;gap:7px}
-.display-area{background:#f7f7f7;border:1px solid #e8e8e8;border-radius:8px;padding:14px 16px;min-height:112px;display:flex;flex-direction:column;justify-content:flex-end}
-.disp-hist{font-size:11px;color:#ccc;text-align:right;min-height:15px;word-break:break-all}
-.disp-expr{font-size:12px;color:#aaa;text-align:right;min-height:16px;margin-top:1px}
-.disp-main{font-size:36px;text-align:right;color:#111;font-weight:300;word-break:break-all;line-height:1.1;margin-top:3px;letter-spacing:-1px}
-.disp-main.error{color:#c0392b;font-size:18px;font-weight:400;letter-spacing:0}
+
+/* STANDARD CALCULATOR — constrained width, centered, fills height */
+.std-wrap{display:flex;flex-direction:column;height:100%;width:100%;max-width:560px;margin:0 auto;padding:16px 20px;gap:6px}
+.display-area{background:#f7f7f7;border:1px solid #e8e8e8;border-radius:8px;padding:14px 18px;flex-shrink:0;display:flex;flex-direction:column;justify-content:flex-end;min-height:min(18vh,120px)}
+.disp-hist{font-size:11px;color:#ccc;text-align:right;word-break:break-all}
+.disp-expr{font-size:12px;color:#aaa;text-align:right;margin-top:1px}
+.disp-main{font-size:clamp(28px,4cqw,44px);text-align:right;color:#111;font-weight:300;word-break:break-all;line-height:1.1;margin-top:4px;letter-spacing:-1px}
+.disp-main.error{color:#c0392b;font-size:clamp(14px,2.5cqw,20px);font-weight:400;letter-spacing:0}
 .mem-ind{font-size:10px;color:#999;display:none;margin-bottom:3px}
 .mem-ind.show{display:block}
-.mode-bar{display:flex;gap:3px}
-.mode-btn{flex:1;padding:5px 0;background:#fff;border:1px solid #e8e8e8;border-radius:5px;color:#aaa;font-size:9px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.1s;text-transform:uppercase;letter-spacing:1px;font-weight:500}
+.mode-bar{display:flex;gap:4px;flex-shrink:0}
+.mode-btn{flex:1;padding:clamp(5px,1vh,8px) 0;background:#fff;border:1px solid #e8e8e8;border-radius:5px;color:#aaa;font-size:clamp(9px,1.1cqw,11px);cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.1s;text-transform:uppercase;letter-spacing:0.8px;font-weight:500}
 .mode-btn:hover{background:#f5f5f5;color:#555}.mode-btn.active{background:#111;color:#fff;border-color:#111}
-.sci-ext{display:none;grid-template-columns:repeat(5,1fr);gap:3px}
-.keypad{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;flex:1}
-.key{background:#fff;border:1px solid #ebebeb;border-radius:6px;color:#555;font-family:'Inter',sans-serif;font-size:12px;cursor:pointer;transition:background 0.08s,border-color 0.08s;display:flex;align-items:center;justify-content:center;user-select:none;min-height:38px;padding:3px;font-weight:400}
-.key:hover{background:#f5f5f5;color:#111;border-color:#d0d0d0}.key:active{background:#eee;transform:scale(0.97)}
-.key.num{color:#111;font-weight:500}.key.op{color:#111;font-size:14px;background:#f8f8f8}
-.key.eq{background:#111;color:#fff;font-weight:600;border-color:#111}.key.eq:hover{background:#333}
-.key.fn{color:#666;font-size:10px;background:#fafafa}.key.mem{color:#777;font-size:9px;background:#fafafa}
+.sci-ext{display:none;grid-template-columns:repeat(5,1fr);gap:5px;flex-shrink:0}
+/* Keypad: fills remaining height, capped width via parent */
+.keypad{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;flex:1;min-height:0}
+.key{background:#fff;border:1px solid #ebebeb;border-radius:8px;color:#555;font-family:'Inter',sans-serif;font-size:clamp(12px,1.6cqw,17px);cursor:pointer;transition:background 0.08s,border-color 0.08s,transform 0.06s;display:flex;align-items:center;justify-content:center;user-select:none;padding:0;font-weight:400;min-height:0;min-width:0}
+.key:hover{background:#f5f5f5;color:#111;border-color:#ccc}.key:active{background:#eee;transform:scale(0.96)}
+.key.num{color:#111;font-weight:500}.key.op{color:#111;font-size:clamp(14px,2cqw,22px);background:#f8f8f8}
+.key.eq{background:#111;color:#fff;font-weight:600;border-color:#111;font-size:clamp(15px,2cqw,24px)}.key.eq:hover{background:#333}
+.key.fn{color:#555;font-size:clamp(10px,1.3cqw,14px);background:#fafafa}.key.mem{color:#777;font-size:clamp(9px,1.1cqw,13px);background:#fafafa}
 .key.del{color:#c0392b}.key.span2{grid-column:span 2}
+
 .panel-header{padding:12px 16px;border-bottom:1px solid #ebebeb;font-size:13px;font-weight:600;background:#fff;display:flex;align-items:center;gap:7px;flex-shrink:0;color:#111}
 .panel-header svg{opacity:0.5}
 .badge{font-size:9px;padding:2px 6px;border-radius:20px;background:#f2f2f2;color:#aaa;font-weight:500;letter-spacing:0.5px;text-transform:uppercase}
@@ -62,11 +66,11 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 .field{margin-bottom:7px}.field:last-child{margin-bottom:0}
 .sel{background:#fafafa;border:1px solid #e8e8e8;color:#111;font-family:'Inter',sans-serif;font-size:12px;padding:7px 9px;border-radius:6px;width:100%;outline:none;cursor:pointer}
 .sel:focus{border-color:#111}
-.btn{background:#111;color:#fff;border:none;padding:7px 13px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;transition:all 0.1s}
+.btn{background:#111;color:#fff;border:none;padding:7px 13px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;transition:all 0.1s;white-space:nowrap}
 .btn:hover{background:#333}.btn:active{transform:scale(0.98)}
 .btn.secondary{background:#fff;color:#555;border:1px solid #e8e8e8}.btn.secondary:hover{background:#f5f5f5;color:#111;border-color:#ccc}
 .btn.ghost{background:transparent;color:#888;border:1px solid #e8e8e8}.btn.ghost:hover{background:#f5f5f5;color:#111}
-.btn-row{display:flex;gap:5px;flex-wrap:wrap}
+.btn-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
 .result-box{background:#fafafa;border:1px solid #ebebeb;border-radius:6px;padding:9px 11px;font-size:11px;color:#1a6e38;min-height:30px;word-break:break-all;white-space:pre-wrap;line-height:1.7;font-family:'Inter',monospace}
 .result-box.error{color:#c0392b}
 .graph-cont{background:#fff;border:1px solid #ebebeb;border-radius:8px;padding:10px}
@@ -100,59 +104,79 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 @keyframes slideIn{from{transform:translateX(50px);opacity:0}to{transform:translateX(0);opacity:1}}
 .graph-func-row{display:flex;gap:7px;margin-bottom:4px;align-items:center}
 
+/* RESPONSIVE — collapse sidebar on narrow screens */
+@media(max-width:640px){
+  .sidebar{width:48px;min-width:48px;}
+  .logo-title,.logo-sub,.nav-label,.nav-item span{display:none}
+  .nav-item{padding:10px;justify-content:center;gap:0}
+  .nav-item svg{opacity:0.6;width:17px;height:17px}
+  .nav-item.active svg{opacity:1}
+  .logo{padding:10px;display:flex;justify-content:center}
+  .two-col{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr 1fr}
+  .const-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:420px){
+  .sidebar{display:none}
+  .panel-header{font-size:12px;padding:9px 12px}
+  .panel-body{padding:10px;gap:8px}
+  .card{padding:10px}
+  .btn{padding:6px 10px;font-size:10px}
+}
+
 </style>
 </head>
 <body>
 <div class="sidebar">
   <div class="logo">
-    <div class="logo-title">Calculator #2</div>
-    <div class="logo-sub">Math Calculator</div>
+    <div class="logo-title">Calculator 2</div>
+    <div class="logo-sub">Math Solver</div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Basic</div>
-    <div class="nav-item active" onclick="nav('standard',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="10" y2="12"/><line x1="12" y1="12" x2="14" y2="12"/><line x1="8" y1="16" x2="10" y2="16"/><line x1="12" y1="16" x2="14" y2="16"/></svg> Standard</div>
-    <div class="nav-item" onclick="nav('scientific',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg> Scientific</div>
-    <div class="nav-item" onclick="nav('history',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> History</div>
+    <div class="nav-item active" onclick="nav('standard',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="10" y2="12"/><line x1="12" y1="12" x2="14" y2="12"/><line x1="8" y1="16" x2="10" y2="16"/><line x1="12" y1="16" x2="14" y2="16"/></svg> <span>Standard</span></div>
+    <div class="nav-item" onclick="nav('scientific',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg> <span>Scientific</span></div>
+    <div class="nav-item" onclick="nav('history',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg> <span>History</span></div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Algebra</div>
-    <div class="nav-item" onclick="nav('algebra',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/><line x1="6" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="10" y2="10"/><line x1="12" y1="14" x2="20" y2="14"/><line x1="16" y1="14" x2="16" y2="20"/></svg> Symbolic</div>
-    <div class="nav-item" onclick="nav('equations',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg> Equations</div>
-    <div class="nav-item" onclick="nav('polynomial',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20 C6 4 10 14 14 10 C17 6 19 4 21 4"/></svg> Polynomials</div>
+    <div class="nav-item" onclick="nav('algebra',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="20" y2="4"/><line x1="6" y1="4" x2="14" y2="4"/><line x1="10" y1="4" x2="10" y2="10"/><line x1="12" y1="14" x2="20" y2="14"/><line x1="16" y1="14" x2="16" y2="20"/></svg> <span>Symbolic</span></div>
+    <div class="nav-item" onclick="nav('equations',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg> <span>Equations</span></div>
+    <div class="nav-item" onclick="nav('polynomial',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20 C6 4 10 14 14 10 C17 6 19 4 21 4"/></svg> <span>Polynomials</span></div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Linear Algebra</div>
-    <div class="nav-item" onclick="nav('matrix',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="2" y="14" width="8" height="8" rx="1"/><rect x="14" y="14" width="8" height="8" rx="1"/></svg> Matrices</div>
-    <div class="nav-item" onclick="nav('vectors',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Vectors</div>
+    <div class="nav-item" onclick="nav('matrix',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="2" y="14" width="8" height="8" rx="1"/><rect x="14" y="14" width="8" height="8" rx="1"/></svg> <span>Matrices</span></div>
+    <div class="nav-item" onclick="nav('vectors',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> <span>Vectors</span></div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Calculus</div>
-    <div class="nav-item" onclick="nav('calculus',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20 C7 3 11 13 15 9 C18 6 20 4 21 4"/><line x1="3" y1="17" x2="21" y2="17" stroke-dasharray="2 2" stroke-width="1.2"/></svg> Derivatives</div>
-    <div class="nav-item" onclick="nav('integration',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3a2 2 0 0 1 4 0v18a2 2 0 0 0 4 0"/><path d="M6 21a2 2 0 0 0 4 0V3"/></svg> Integrals</div>
-    <div class="nav-item" onclick="nav('odes',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12 Q5 5 8 12 Q11 19 14 12 Q17 5 21 12"/></svg> Diff. Eqs</div>
+    <div class="nav-item" onclick="nav('calculus',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20 C7 3 11 13 15 9 C18 6 20 4 21 4"/><line x1="3" y1="17" x2="21" y2="17" stroke-dasharray="2 2" stroke-width="1.2"/></svg> <span>Derivatives</span></div>
+    <div class="nav-item" onclick="nav('integration',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3a2 2 0 0 1 4 0v18a2 2 0 0 0 4 0"/><path d="M6 21a2 2 0 0 0 4 0V3"/></svg> <span>Integrals</span></div>
+    <div class="nav-item" onclick="nav('odes',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12 Q5 5 8 12 Q11 19 14 12 Q17 5 21 12"/></svg> <span>Diff. Eqs</span></div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Data</div>
-    <div class="nav-item" onclick="nav('graph',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> QR Grapher</div>
-    <div class="nav-item" onclick="nav('stats',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg> Statistics</div>
-    <div class="nav-item" onclick="nav('regression',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="19" r="1.5" fill="currentColor"/><circle cx="9" cy="14" r="1.5" fill="currentColor"/><circle cx="14" cy="9" r="1.5" fill="currentColor"/><circle cx="19" cy="5" r="1.5" fill="currentColor"/><line x1="3" y1="21" x2="21" y2="4" stroke-dasharray="3 2"/></svg> Regression</div>
+    <div class="nav-item" onclick="nav('graph',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> <span>QR Grapher</span></div>
+    <div class="nav-item" onclick="nav('stats',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg> <span>Statistics</span></div>
+    <div class="nav-item" onclick="nav('regression',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="19" r="1.5" fill="currentColor"/><circle cx="9" cy="14" r="1.5" fill="currentColor"/><circle cx="14" cy="9" r="1.5" fill="currentColor"/><circle cx="19" cy="5" r="1.5" fill="currentColor"/><line x1="3" y1="21" x2="21" y2="4" stroke-dasharray="3 2"/></svg> <span>Regression</span></div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Numbers</div>
-    <div class="nav-item" onclick="nav('complex',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Complex</div>
-    <div class="nav-item" onclick="nav('precision',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg> Precision</div>
-    <div class="nav-item" onclick="nav('constants',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg> Constants</div>
+    <div class="nav-item" onclick="nav('complex',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="3" y1="12" x2="21" y2="12"/></svg> <span>Complex</span></div>
+    <div class="nav-item" onclick="nav('precision',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg> <span>Precision</span></div>
+    <div class="nav-item" onclick="nav('constants',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg> <span>Constants</span></div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Convert</div>
-    <div class="nav-item" onclick="nav('units',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3"/></svg> Units</div>
-    <div class="nav-item" onclick="nav('currency',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/><path d="M9 10h4.5a1.5 1.5 0 0 1 0 3H9"/></svg> Currency</div>
-    <div class="nav-item" onclick="nav('time',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> Time</div>
-    <div class="nav-item" onclick="nav('numbase',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="10" x2="10" y2="14"/><line x1="14" y1="10" x2="14" y2="14"/><line x1="18" y1="10" x2="18" y2="14"/></svg> Base Conv.</div>
+    <div class="nav-item" onclick="nav('units',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3"/></svg> <span>Units</span></div>
+    <div class="nav-item" onclick="nav('currency',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/><path d="M9 10h4.5a1.5 1.5 0 0 1 0 3H9"/></svg> <span>Currency</span></div>
+    <div class="nav-item" onclick="nav('time',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg> <span>Time</span></div>
+    <div class="nav-item" onclick="nav('numbase',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="10" x2="10" y2="14"/><line x1="14" y1="10" x2="14" y2="14"/><line x1="18" y1="10" x2="18" y2="14"/></svg> <span>Base Conv.</span></div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Applied</div>
-    <div class="nav-item" onclick="nav('models',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16 Q10 10 13 13 Q16 16 20 8"/></svg> Models</div>
+    <div class="nav-item" onclick="nav('models',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16 Q10 10 13 13 Q16 16 20 8"/></svg> <span>Models</span></div>
   </div>
 </div>
 <div class="main">
@@ -658,25 +682,27 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
   <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> QR Grapher</div>
   <div class="panel-body">
     <div class="card">
-      <div class="card-title">Functions to Plot</div>
+      <div class="card-title">Functions</div>
       <div id="gfuncs">
         <div class="graph-func-row">
           <div style="width:8px;height:8px;border-radius:50%;background:#111;flex-shrink:0"></div>
-          <input class="inp" style="flex:1" placeholder="f₁(x)" value="sin(x)" data-c="#111111"/>
+          <input class="inp" style="flex:1" placeholder="f₁(x)" value="sin(x)" data-c="#111111" onkeydown="if(event.key==='Enter')plotFns()"/>
           <button class="btn ghost" style="font-size:9px;padding:2px 6px" onclick="rmGraph(this)">&#10005;</button>
         </div>
       </div>
       <div class="btn-row" style="margin-bottom:9px"><button class="btn secondary" onclick="addGraph()">+ Function</button></div>
-      <div class="two-col">
-        <div class="field"><label class="lbl">x min</label><input class="inp" id="gx-min" value="-10"/></div>
-        <div class="field"><label class="lbl">x max</label><input class="inp" id="gx-max" value="10"/></div>
-      </div>
       <div class="btn-row">
         <button class="btn" onclick="plotFns()">Plot</button>
-        <button class="btn secondary" onclick="graphQR()">Generate QR Code</button>
+        <button class="btn secondary" onclick="graphQR()">QR Code</button>
+        <button class="btn ghost" onclick="resetGraphView()">Reset View</button>
+        <span style="font-size:10px;color:#bbb;align-self:center">Scroll to zoom · Drag to pan</span>
       </div>
     </div>
-    <div class="graph-cont"><canvas id="g-chart" height="340"></canvas></div>
+    <!-- Interactive canvas grapher (no external zoom plugin needed) -->
+    <div class="card" style="padding:0;overflow:hidden;position:relative">
+      <canvas id="g-canvas" style="display:block;width:100%;cursor:crosshair;touch-action:none"></canvas>
+      <div id="g-coords" style="position:absolute;top:6px;right:8px;font-size:9px;color:#aaa;pointer-events:none;background:rgba(255,255,255,0.8);padding:2px 5px;border-radius:3px"></div>
+    </div>
     <div class="card" id="qr-card" style="display:none">
       <div class="card-title">Scan to view on phone</div>
       <div id="qr-out" style="display:flex;justify-content:center;padding:10px"></div>
@@ -927,15 +953,21 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
   <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/><path d="M9 10h4.5a1.5 1.5 0 0 1 0 3H9"/></svg> Currency</div>
   <div class="panel-body">
     <div class="card">
-      <div class="card-title">Currency Conversion (Reference Rates vs USD)</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+        <div class="card-title" style="margin:0">Exchange Rates</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span id="cur-status" style="font-size:9px;color:#bbb">Loading...</span>
+          <button class="btn ghost" style="font-size:9px;padding:3px 8px" onclick="fetchLiveRates()">Refresh</button>
+        </div>
+      </div>
       <div class="field"><label class="lbl">Amount</label><input class="inp" id="cur-amt" value="100"/></div>
       <div class="two-col">
-        <div class="field"><label class="lbl">From</label><select class="sel" id="cur-fr" onchange=""></select></div>
+        <div class="field"><label class="lbl">From</label><select class="sel" id="cur-fr"></select></div>
         <div class="field"><label class="lbl">To</label><select class="sel" id="cur-to"></select></div>
       </div>
       <div class="btn-row">
         <button class="btn" onclick="currConv()">Convert</button>
-        <button class="btn secondary" onclick="allRates()">Show All USD Rates</button>
+        <button class="btn secondary" onclick="allRates()">All Rates</button>
       </div>
       <div class="result-box" id="cur-out" style="margin-top:9px">—</div>
     </div>
@@ -1826,33 +1858,186 @@ function logisticGrowth(){
 // GRAPHING
 // ============================================================
 const GC=['#111111','#555555','#999999','#333333','#777777','#aaaaaa'];
-function addGraph(){
-  const list=document.getElementById('gfuncs');
-  const idx=list.children.length;const c=GC[idx%GC.length];
-  const d=document.createElement('div');d.className='graph-func-row';
-  d.innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><input class="inp" style="flex:1" placeholder="f(x)" data-c="${c}"/><button class="btn secondary" style="font-size:9px;padding:3px 7px" onclick="rmGraph(this)">x</button>`;
-  list.appendChild(d);
+// ============================================================
+// INTERACTIVE GRAPHER — pan & zoom canvas, no plugin needed
+// ============================================================
+const GV={xmin:-10,xmax:10,ymin:-6,ymax:6,dragging:false,lastX:0,lastY:0,fns:[],pinchDist:0};
+const GC_COLORS=['#111111','#c0392b','#2980b9','#27ae60','#8e44ad','#e67e22'];
+
+function gCanvas(){return document.getElementById('g-canvas');}
+
+function initGraphCanvas(){
+  const cv=gCanvas();if(!cv)return;
+  // Set pixel size
+  const resize=()=>{
+    const w=cv.parentElement.clientWidth;
+    const h=Math.max(300,Math.min(480,window.innerHeight*0.45));
+    cv.width=w*window.devicePixelRatio;
+    cv.height=h*window.devicePixelRatio;
+    cv.style.height=h+'px';
+    renderGraph();
+  };
+  resize();
+  new ResizeObserver(resize).observe(cv.parentElement);
+
+  // Mouse events
+  cv.addEventListener('mousedown',e=>{GV.dragging=true;GV.lastX=e.clientX;GV.lastY=e.clientY;});
+  cv.addEventListener('mousemove',e=>{
+    if(GV.dragging){
+      const dx=e.clientX-GV.lastX,dy=e.clientY-GV.lastY;GV.lastX=e.clientX;GV.lastY=e.clientY;
+      const w=cv.clientWidth,h=cv.clientHeight;
+      const rx=(GV.xmax-GV.xmin)/w,ry=(GV.ymax-GV.ymin)/h;
+      GV.xmin-=dx*rx;GV.xmax-=dx*rx;GV.ymin+=dy*ry;GV.ymax+=dy*ry;
+      renderGraph();
+    }
+    // Show coordinates
+    const r=cv.getBoundingClientRect();
+    const mx=GV.xmin+(e.clientX-r.left)/cv.clientWidth*(GV.xmax-GV.xmin);
+    const my=GV.ymax-(e.clientY-r.top)/cv.clientHeight*(GV.ymax-GV.ymin);
+    const cd=document.getElementById('g-coords');
+    if(cd)cd.textContent=`(${mx.toFixed(3)}, ${my.toFixed(3)})`;
+  });
+  window.addEventListener('mouseup',()=>{GV.dragging=false;});
+
+  // Scroll wheel zoom
+  cv.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const r=cv.getBoundingClientRect();
+    const mx=GV.xmin+(e.clientX-r.left)/cv.clientWidth*(GV.xmax-GV.xmin);
+    const my=GV.ymax-(e.clientY-r.top)/cv.clientHeight*(GV.ymax-GV.ymin);
+    const factor=e.deltaY>0?1.12:0.89;
+    GV.xmin=(GV.xmin-mx)*factor+mx;GV.xmax=(GV.xmax-mx)*factor+mx;
+    GV.ymin=(GV.ymin-my)*factor+my;GV.ymax=(GV.ymax-my)*factor+my;
+    renderGraph();
+  },{passive:false});
+
+  // Touch events for mobile
+  cv.addEventListener('touchstart',e=>{
+    if(e.touches.length===1){GV.dragging=true;GV.lastX=e.touches[0].clientX;GV.lastY=e.touches[0].clientY;}
+    else if(e.touches.length===2){GV.dragging=false;GV.pinchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}
+    e.preventDefault();
+  },{passive:false});
+  cv.addEventListener('touchmove',e=>{
+    if(e.touches.length===1&&GV.dragging){
+      const dx=e.touches[0].clientX-GV.lastX,dy=e.touches[0].clientY-GV.lastY;
+      GV.lastX=e.touches[0].clientX;GV.lastY=e.touches[0].clientY;
+      const rx=(GV.xmax-GV.xmin)/cv.clientWidth,ry=(GV.ymax-GV.ymin)/cv.clientHeight;
+      GV.xmin-=dx*rx;GV.xmax-=dx*rx;GV.ymin+=dy*ry;GV.ymax+=dy*ry;
+      renderGraph();
+    } else if(e.touches.length===2){
+      const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      const cx=(GV.xmin+GV.xmax)/2,cy=(GV.ymin+GV.ymax)/2;
+      const factor=GV.pinchDist/d;GV.pinchDist=d;
+      GV.xmin=(GV.xmin-cx)*factor+cx;GV.xmax=(GV.xmax-cx)*factor+cx;
+      GV.ymin=(GV.ymin-cy)*factor+cy;GV.ymax=(GV.ymax-cy)*factor+cy;
+      renderGraph();
+    }
+    e.preventDefault();
+  },{passive:false});
+  cv.addEventListener('touchend',()=>{GV.dragging=false;});
 }
-function rmGraph(btn){const rows=document.querySelectorAll('.graph-func-row');if(rows.length>1)btn.closest('.graph-func-row').remove();}
+
+function renderGraph(){
+  const cv=gCanvas();if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  const dpr=window.devicePixelRatio||1;
+  ctx.clearRect(0,0,W,H);
+
+  // White background
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+
+  const toX=x=>(x-GV.xmin)/(GV.xmax-GV.xmin)*W;
+  const toY=y=>(GV.ymax-y)/(GV.ymax-GV.ymin)*H;
+
+  // Grid lines
+  function niceStep(range,maxLines){const raw=range/maxLines;const p=Math.pow(10,Math.floor(Math.log10(raw)));const m=[1,2,2.5,5,10].find(m=>m*p>=raw)||10;return m*p;}
+  const xStep=niceStep(GV.xmax-GV.xmin,10),yStep=niceStep(GV.ymax-GV.ymin,8);
+
+  ctx.strokeStyle='rgba(0,0,0,0.06)';ctx.lineWidth=1*dpr;
+  for(let x=Math.ceil(GV.xmin/xStep)*xStep;x<=GV.xmax;x+=xStep){ctx.beginPath();ctx.moveTo(toX(x),0);ctx.lineTo(toX(x),H);ctx.stroke();}
+  for(let y=Math.ceil(GV.ymin/yStep)*yStep;y<=GV.ymax;y+=yStep){ctx.beginPath();ctx.moveTo(0,toY(y));ctx.lineTo(W,toY(y));ctx.stroke();}
+
+  // Axes
+  ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=1.5*dpr;
+  const ox=toX(0),oy=toY(0);
+  ctx.beginPath();ctx.moveTo(ox,0);ctx.lineTo(ox,H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(W,oy);ctx.stroke();
+
+  // Tick labels
+  ctx.fillStyle='#aaa';ctx.font=`${9*dpr}px Inter,sans-serif`;ctx.textAlign='center';
+  for(let x=Math.ceil(GV.xmin/xStep)*xStep;x<=GV.xmax;x+=xStep){
+    if(Math.abs(x)<1e-9)continue;
+    const px=toX(x),py=Math.min(H-4*dpr,Math.max(12*dpr,oy+12*dpr));
+    ctx.fillText(x%1===0?x:x.toFixed(1),px,py);
+  }
+  ctx.textAlign='right';
+  for(let y=Math.ceil(GV.ymin/yStep)*yStep;y<=GV.ymax;y+=yStep){
+    if(Math.abs(y)<1e-9)continue;
+    const py=toY(y),px=Math.max(28*dpr,Math.min(W-4*dpr,ox-6*dpr));
+    ctx.fillText(y%1===0?y:y.toFixed(1),px,py+3*dpr);
+  }
+
+  // Functions
+  const N=Math.min(W,2000);
+  GV.fns.forEach((fn,fi)=>{
+    ctx.strokeStyle=fn.color||GC_COLORS[fi%GC_COLORS.length];
+    ctx.lineWidth=2*dpr;ctx.lineJoin='round';
+    ctx.beginPath();let penUp=true;
+    for(let i=0;i<=N;i++){
+      const x=GV.xmin+(GV.xmax-GV.xmin)*i/N;
+      let y;try{y=efn(fn.expr,x);}catch(e){penUp=true;continue;}
+      if(y===null||!isFinite(y)||Math.abs(y)>1e10){penUp=true;continue;}
+      const px=i/N*W,py=toY(y);
+      // Detect discontinuity (steep jump)
+      if(!penUp&&Math.abs(py-prevPy)>H*1.5){penUp=true;}
+      if(penUp){ctx.moveTo(px,py);penUp=false;}else ctx.lineTo(px,py);
+      var prevPy=py;
+    }
+    ctx.stroke();
+
+    // Label at right edge
+    const labelX=GV.xmax-0.05*(GV.xmax-GV.xmin);
+    let labelY;try{labelY=efn(fn.expr,labelX);}catch(e){}
+    if(labelY!==undefined&&isFinite(labelY)&&Math.abs(labelY)<=GV.ymax*1.2){
+      ctx.fillStyle=fn.color||GC_COLORS[fi%GC_COLORS.length];
+      ctx.font=`${9*dpr}px Inter,sans-serif`;ctx.textAlign='left';
+      ctx.fillText(fn.expr,toX(labelX)+4,Math.max(12*dpr,Math.min(H-4*dpr,toY(labelY))));
+    }
+  });
+}
 
 function plotFns(){
-  const xmin=parseFloat(document.getElementById('gx-min').value)||-10;
-  const xmax=parseFloat(document.getElementById('gx-max').value)||10;
-  const rows=document.querySelectorAll('#gfuncs .graph-func-row');
-  const ds=[];const labels=[];
-  for(let x=xmin;x<=xmax;x+=(xmax-xmin)/500)labels.push(x.toFixed(3));
-  rows.forEach(row=>{
+  GV.fns=[];
+  document.querySelectorAll('#gfuncs .graph-func-row').forEach((row,i)=>{
     const inp=row.querySelector('input');const expr=inp.value.trim();if(!expr)return;
-    const c=inp.dataset.c||'#111111';const ys=[];
-    labels.forEach(x=>{try{const y=efn(expr,parseFloat(x));ys.push(Math.abs(y)<1e8?y:null);}catch(e){ys.push(null);}});
-    ds.push({label:'f(x)='+expr,data:ys,c,borderColor:c,borderWidth:2,pointRadius:0,tension:0});
+    GV.fns.push({expr,color:inp.dataset.c||GC_COLORS[i%GC_COLORS.length]});
   });
-  dChart('g-chart',labels,ds,'Function Graph');
+  // Auto-fit y range by sampling
+  if(GV.fns.length){
+    let ylo=Infinity,yhi=-Infinity;
+    for(let i=0;i<=200;i++){
+      const x=GV.xmin+(GV.xmax-GV.xmin)*i/200;
+      GV.fns.forEach(fn=>{try{const y=efn(fn.expr,x);if(isFinite(y)&&Math.abs(y)<1e6){ylo=Math.min(ylo,y);yhi=Math.max(yhi,y);}}catch(e){}});
+    }
+    if(isFinite(ylo)&&isFinite(yhi)&&yhi>ylo){const pad=(yhi-ylo)*0.15;GV.ymin=ylo-pad;GV.ymax=yhi+pad;}
+  }
+  renderGraph();
 }
 
+function resetGraphView(){GV.xmin=-10;GV.xmax=10;GV.ymin=-6;GV.ymax=6;renderGraph();}
+
+function addGraph(){
+  const cont=document.getElementById('gfuncs');const n=cont.children.length;
+  const c=GC_COLORS[n%GC_COLORS.length];
+  const d=document.createElement('div');d.className='graph-func-row';
+  d.innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div><input class="inp" style="flex:1" placeholder="f${n+1}(x)" data-c="${c}" onkeydown="if(event.key==='Enter')plotFns()"/><button class="btn ghost" style="font-size:9px;padding:2px 6px" onclick="rmGraph(this)">&#10005;</button>`;
+  cont.appendChild(d);
+}
+function rmGraph(btn){const row=btn.closest('.graph-func-row');if(document.querySelectorAll('#gfuncs .graph-func-row').length>1)row.remove();}
+
 function graphQR(){
-  const rows=document.querySelectorAll('#gfuncs .graph-func-row');
-  const exprs=[];rows.forEach(r=>{const v=r.querySelector('input').value.trim();if(v)exprs.push(v);});
+  const exprs=[];document.querySelectorAll('#gfuncs .graph-func-row').forEach(r=>{const v=r.querySelector('input').value.trim();if(v)exprs.push(v);});
   const url='https://www.desmos.com/calculator';
   document.getElementById('qr-card').style.display='block';
   genQR('qr-out',url);notify('QR code ready.');
@@ -2173,35 +2358,91 @@ function uConv(){
 function uAll(){
   const cat=document.getElementById('u-cat').value;const v=parseFloat(document.getElementById('u-val').value);
   const fr=document.getElementById('u-from').value;const d=UD[cat];
-  if(!d||d.special)return uConv();
+  if(!d){setE('u-out','Unknown category');return;}
+  if(d.special==='temp'){
+    let out=`${v} ${fr} in all temperatures:\n\n`;
+    d.u.forEach(u=>out+=`  ${convTemp(v,fr,u).toPrecision(8).padEnd(16)} ${u}\n`);
+    set('u-out',out);return;
+  }
+  if(d.special==='fuel'){
+    let out=`${v} ${fr} in all fuel units:\n\n`;
+    d.u.forEach(u=>{
+      try{
+        let km;
+        if(fr==='L/100km')km=100/v;
+        else{const bfr=fr==='km/L'?1:fr.includes('US')?0.425144:0.354006;km=v*bfr;}
+        let r;
+        if(u==='L/100km')r=100/km;
+        else{const bu=u==='km/L'?1:u.includes('US')?0.425144:0.354006;r=km/bu;}
+        out+=`  ${r.toPrecision(8).padEnd(16)} ${u}\n`;
+      }catch(e){out+=`  error          ${u}\n`;}
+    });
+    set('u-out',out);return;
+  }
   const base=v*d.b[fr];
-  let out=`${v} ${fr} =\n\n`;d.u.forEach(u=>out+=`  ${(base/d.b[u]).toPrecision(8).padEnd(16)} ${u}\n`);
+  let out=`${v} ${fr} =\n\n`;
+  d.u.forEach(u=>out+=`  ${(base/d.b[u]).toPrecision(8).padEnd(16)} ${u}\n`);
   set('u-out',out);
 }
 
 // ============================================================
-// CURRENCY
+// CURRENCY — live via frankfurter.app (free, no key needed)
 // ============================================================
-const ER={USD:1,EUR:0.923,GBP:0.789,JPY:149.5,AUD:1.53,CAD:1.36,CHF:0.895,CNY:7.24,INR:83.1,KRW:1325,SGD:1.34,HKD:7.82,NOK:10.56,SEK:10.43,DKK:6.89,NZD:1.63,ZAR:18.63,BRL:4.97,MXN:17.15,RUB:92.5,TRY:30.8,AED:3.67,SAR:3.75,THB:35.1,IDR:15600,MYR:4.68,PHP:55.6,PLN:4.02};
+let ER={USD:1,EUR:0.923,GBP:0.789,JPY:149.5,AUD:1.535,CAD:1.362,CHF:0.896,CNY:7.241,INR:83.15,KRW:1327,SGD:1.342,HKD:7.823,NOK:10.58,SEK:10.44,DKK:6.893,NZD:1.635,ZAR:18.65,BRL:4.975,MXN:17.18,AED:3.673,SAR:3.753,THB:35.12,IDR:15620,MYR:4.685,PHP:55.65,PLN:4.025,CZK:23.52,HUF:364,ILS:3.734,COP:4155,PEN:3.723,CLP:972,TWD:32.55,VND:25210,QAR:3.642,KWD:0.308,BHD:0.378,OMR:0.386,EGP:50.85,NGN:1608,KES:131,MAD:9.97,TRY:36.8};
+let erSource='built-in';let erLoaded=false;
+
+async function fetchLiveRates(){
+  const st=document.getElementById('cur-status');
+  if(st)st.textContent='Loading live rates...';
+  try{
+    // frankfurter.app — ECB rates, free, no key, CORS open
+    const r=await fetch('https://api.frankfurter.app/latest?from=USD',{signal:AbortSignal.timeout(6000)});
+    if(!r.ok)throw new Error('status '+r.status);
+    const d=await r.json();
+    Object.assign(ER,d.rates);ER.USD=1;erLoaded=true;
+    erSource='frankfurter.app / ECB (live '+new Date().toLocaleTimeString()+')';
+    if(st){st.textContent='Live: '+new Date().toLocaleTimeString();st.style.color='#1a6e38';}
+    // Rebuild selects in case new currencies arrived
+    buildCurrencySelects();
+    notify('Live rates loaded.');
+  }catch(e){
+    erSource='built-in fallback (offline)';
+    if(st){st.textContent='Offline — using built-in rates';st.style.color='#888';}
+  }
+}
+
+function buildCurrencySelects(){
+  const curs=Object.keys(ER).sort();
+  const mk=curs.map(c=>`<option>${c}</option>`).join('');
+  const fr=document.getElementById('cur-fr');const to=document.getElementById('cur-to');
+  const frV=fr.value,toV=to.value;
+  fr.innerHTML=mk;to.innerHTML=mk;
+  fr.value=frV||'USD';to.value=toV||'EUR';
+}
 
 function initCurrency(){
-  const curs=Object.keys(ER);const html=curs.map(c=>`<option>${c}</option>`).join('');
-  document.getElementById('cur-fr').innerHTML=html;document.getElementById('cur-to').innerHTML=html;document.getElementById('cur-to').selectedIndex=1;
+  buildCurrencySelects();
+  fetchLiveRates();
 }
 
 function currConv(){
-  const amt=parseFloat(document.getElementById('cur-amt').value);
-  const fr=document.getElementById('cur-fr').value;const to=document.getElementById('cur-to').value;
+  const amt=parseFloat(document.getElementById('cur-amt').value)||1;
+  const fr=document.getElementById('cur-fr').value;
+  const to=document.getElementById('cur-to').value;
+  if(!ER[fr]||!ER[to]){setE('cur-out','Currency not found. Try refreshing rates.');return;}
   const r=amt/ER[fr]*ER[to];
-  set('cur-out',`${amt} ${fr} = ${r.toFixed(4)} ${to}\n(Rate: 1 ${fr} = ${(ER[to]/ER[fr]).toFixed(6)} ${to})\n\nReference rates only, not live data.`);
+  const rate=ER[to]/ER[fr];
+  set('cur-out',`${amt} ${fr}  =  ${r.toFixed(4)} ${to}\n\n1 ${fr} = ${rate.toPrecision(6)} ${to}\n1 ${to} = ${(1/rate).toPrecision(6)} ${fr}\n\nSource: ${erSource}`);
 }
 
 function allRates(){
   const amt=parseFloat(document.getElementById('cur-amt').value)||1;
   const fr=document.getElementById('cur-fr').value;
-  let out=`${amt} ${fr} in all currencies:\n\n`;
-  Object.entries(ER).forEach(([c,r])=>out+=`  ${c.padEnd(5)} ${(amt/ER[fr]*r).toFixed(4)}\n`);
-  set('cur-out',out+'(Reference rates only)');
+  if(!ER[fr]){setE('cur-out','Unknown currency');return;}
+  const sorted=Object.entries(ER).sort((a,b)=>a[0].localeCompare(b[0]));
+  let out=`${amt} ${fr} in all currencies:\n(${erSource})\n\n`;
+  sorted.forEach(([c,r])=>out+=`  ${c.padEnd(5)} ${(amt/ER[fr]*r).toFixed(4)}\n`);
+  set('cur-out',out);
 }
 
 // ============================================================
@@ -2369,7 +2610,31 @@ function notify(msg){
 (function init(){
   buildMat();uOpts();fillConsts();ud();initCurrency();
   const t=new Date().toISOString().split('T')[0];['d1','d2','d-add'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=t;});
-  setTimeout(()=>{try{plotFns();}catch(e){}},600);
+  // Initialize interactive canvas grapher
+  initGraphCanvas();
+  setTimeout(()=>{try{plotFns();}catch(e){}},300);
+
+  // Dynamically scale calculator key text to fit key size
+  function scaleKeys(){
+    const keypad=document.querySelector('.keypad');
+    if(!keypad)return;
+    const firstKey=keypad.querySelector('.key');
+    if(!firstKey)return;
+    const h=firstKey.getBoundingClientRect().height;
+    const w=firstKey.getBoundingClientRect().width;
+    const base=Math.min(h*0.32,w*0.30,18);
+    document.querySelectorAll('.key').forEach(k=>{
+      let s=base;
+      if(k.classList.contains('op')||k.classList.contains('eq'))s=base*1.25;
+      if(k.classList.contains('fn'))s=base*0.78;
+      if(k.classList.contains('mem'))s=base*0.70;
+      k.style.fontSize=Math.round(Math.max(9,s))+'px';
+    });
+    document.querySelectorAll('.mode-btn').forEach(b=>b.style.fontSize=Math.max(8,Math.round(base*0.62))+'px');
+  }
+  const ro=new ResizeObserver(scaleKeys);
+  const kp=document.querySelector('.keypad');
+  if(kp)ro.observe(kp);
   // Keyboard shortcuts for expression fields
   document.addEventListener('keydown',e=>{
     if(e.target.id==='sci-in'&&e.key==='Enter')evalSci();
