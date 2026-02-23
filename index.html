@@ -177,6 +177,12 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
   <div class="nav-section">
     <div class="nav-label">Applied</div>
     <div class="nav-item" onclick="nav('models',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16 Q10 10 13 13 Q16 16 20 8"/></svg> <span>Models</span></div>
+      <div class="nav-item" id="offline-btn" onclick="cacheCurrentSite()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 11l-7 7-7-7M12 4v14"/>
+    </svg> 
+    <span>Save Offline</span>
+  </div>
   </div>
 </div>
 <div class="main">
@@ -2648,7 +2654,47 @@ function notify(msg){
   });
   notify('Calculator 2 ready.');
 })();
+async function cacheCurrentSite() {
+  const btn = document.getElementById('offline-btn');
+  btn.querySelector('span').textContent = 'Syncing...';
 
+  // 1. Automatically find all CDNs currently loaded in the <head>
+  const scripts = Array.from(document.querySelectorAll('script[src]')).map(s => s.src);
+  const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
+  
+  const assetsToCache = [
+    window.location.href, // The HTML file itself
+    ...scripts,
+    ...styles
+  ];
+
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      const CACHE_NAME = 'calc-offline-v1';
+      const ASSETS = ${JSON.stringify(assetsToCache)};
+
+      self.addEventListener('install', e => {
+        e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
+      });
+
+      self.addEventListener('fetch', e => {
+        e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+      });
+    `;
+
+    const blob = new Blob([swCode], { type: 'application/javascript' });
+    const workerUrl = URL.createObjectURL(blob);
+    
+    try {
+      await navigator.serviceWorker.register(workerUrl);
+      btn.style.color = '#2ecc71';
+      btn.querySelector('span').textContent = 'Saved Offline';
+      alert('Calculator Saved! You can now load this page even without internet.');
+    } catch (err) {
+      alert('Error saving for offline use.');
+    }
+  }
+}
 </script>
 </body>
 </html>
