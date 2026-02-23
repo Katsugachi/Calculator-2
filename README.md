@@ -2,7 +2,7 @@
 The Swiss Army Knife Of All Calculators <br>
 Newest Calculator Major Update Since 1961's ANITA MK-8 <br>
 One Of The Most Powerful Open Source Unitized Calculators As Of 2026 <br>
-> Courtesy To Claude 4.6
+> Courtesy To Claude Sonnet 4.6
 # Web Version
 [![Launch](https://img.shields.io/badge/Launch-Calculator%202-blue?style=for-the-badge)](https://katsugachi.github.io/Calculator-2/) <br>
 Make sure to hit save offline to ensure the site works even with no internet
