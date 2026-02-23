@@ -8,6 +8,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
@@ -73,6 +75,12 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 .btn-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
 .result-box{background:#fafafa;border:1px solid #ebebeb;border-radius:6px;padding:9px 11px;font-size:11px;color:#1a6e38;min-height:30px;word-break:break-all;white-space:pre-wrap;line-height:1.7;font-family:'Inter',monospace}
 .result-box.error{color:#c0392b}
+.result-box.latex{white-space:normal;word-break:normal;font-family:'Inter',sans-serif;padding:12px 14px}
+.result-box .katex-block{display:block;text-align:left;margin:4px 0;overflow-x:auto;overflow-y:hidden}
+.result-box .katex-block .katex{font-size:1.1em}
+.result-box .result-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;font-weight:500;display:block;font-family:'Inter',sans-serif}
+.result-box .result-row{display:flex;align-items:baseline;gap:8px;margin:5px 0;flex-wrap:wrap}
+.result-box .result-plain{font-family:'Inter',monospace;font-size:11px;color:#555;word-break:break-all}
 .graph-cont{background:#fff;border:1px solid #ebebeb;border-radius:8px;padding:10px}
 .graph-cont canvas{max-width:100%;border-radius:4px}
 .tbl{width:100%;border-collapse:collapse;font-size:11px}
@@ -130,7 +138,7 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 <div class="sidebar">
   <div class="logo">
     <div class="logo-title">Calculator 2</div>
-    <div class="logo-sub">Math Solver</div>
+    <div class="logo-sub">All-in-one math</div>
   </div>
   <div class="nav-section">
     <div class="nav-label">Basic</div>
@@ -175,14 +183,27 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
     <div class="nav-item" onclick="nav('numbase',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="14"/><line x1="10" y1="10" x2="10" y2="14"/><line x1="14" y1="10" x2="14" y2="14"/><line x1="18" y1="10" x2="18" y2="14"/></svg> <span>Base Conv.</span></div>
   </div>
   <div class="nav-section">
+    <div class="nav-label">Advanced</div>
+    <div class="nav-item" onclick="nav('taylor',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20 Q8 4 12 12 Q16 20 20 4"/></svg> <span>Taylor Series</span></div>
+    <div class="nav-item" onclick="nav('limits',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18 Q7 18 10 12 Q13 6 17 12 Q19 16 21 6"/></svg> <span>Limits</span></div>
+    <div class="nav-item" onclick="nav('symcalc',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3a2 2 0 0 1 4 0v18a2 2 0 0 0 4 0"/><path d="M6 21a2 2 0 0 0 4 0V3"/></svg> <span>Sym. Calculus</span></div>
+    <div class="nav-item" onclick="nav('gramschmidt',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="4" y2="4"/><line x1="4" y1="20" x2="20" y2="20"/><line x1="4" y1="8" x2="10" y2="20"/><line x1="10" y1="20" x2="18" y2="4"/></svg> <span>Gram-Schmidt</span></div>
+    <div class="nav-item" onclick="nav('linalg2',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg> <span>Null/Col Space</span></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Geometry</div>
+    <div class="nav-item" onclick="nav('triangle',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 22 2 22"/></svg> <span>Triangle Solver</span></div>
+    <div class="nav-item" onclick="nav('conics',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="9" ry="5"/></svg> <span>Conic Sections</span></div>
+    <div class="nav-item" onclick="nav('geo3d',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3L3 8v8l9 5 9-5V8L12 3z"/></svg> <span>3D Geometry</span></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Graph Theory</div>
+    <div class="nav-item" onclick="nav('graphtheory',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="2" fill="currentColor"/><circle cx="19" cy="5" r="2" fill="currentColor"/><circle cx="5" cy="19" r="2" fill="currentColor"/><circle cx="19" cy="19" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><line x1="7" y1="5" x2="17" y2="5"/><line x1="5" y1="7" x2="5" y2="17"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="14" y1="14" x2="17" y2="17"/></svg> <span>Graph Theory</span></div>
+  </div>
+  <div class="nav-section">
     <div class="nav-label">Applied</div>
     <div class="nav-item" onclick="nav('models',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16 Q10 10 13 13 Q16 16 20 8"/></svg> <span>Models</span></div>
-      <div class="nav-item" id="offline-btn" onclick="cacheCurrentSite()">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M19 11l-7 7-7-7M12 4v14"/>
-    </svg> 
-    <span>Save Offline</span>
-  </div>
+    <div class="nav-item" onclick="nav('offline',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/><line x1="2" y1="2" x2="22" y2="22"/></svg> <span>Save Offline</span></div>
   </div>
 </div>
 <div class="main">
@@ -1151,9 +1172,334 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
   </div>
 </div>
 
+
+<!-- TAYLOR SERIES -->
+<div class="panel" id="panel-taylor">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20 Q8 4 12 12 Q16 20 20 4"/></svg> Taylor Series</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Taylor / Maclaurin Expansion</div>
+      <div class="field"><label class="lbl">f(x)</label><input class="inp" id="ts-fx" value="sin(x)"/></div>
+      <div class="two-col">
+        <div class="field"><label class="lbl">Center a (0 = Maclaurin)</label><input class="inp" id="ts-a" value="0" type="number"/></div>
+        <div class="field"><label class="lbl">Terms N</label><input class="inp" id="ts-n" value="6" type="number" min="1" max="12"/></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="taylorSeries()">Expand</button>
+        <button class="btn secondary" onclick="taylorPlot()">Plot Convergence</button>
+      </div>
+      <div class="result-box" id="ts-out" style="margin-top:9px">—</div>
+      <div class="graph-cont" id="ts-graph" style="display:none;margin-top:8px"><canvas id="ts-chart" height="220"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- LIMITS -->
+<div class="panel" id="panel-limits">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18 Q7 18 10 12 Q13 6 17 12 Q19 16 21 6"/></svg> Limits</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Numerical Limit (Two-Sided &amp; One-Sided)</div>
+      <div class="field"><label class="lbl">f(x)</label><input class="inp" id="lim-f" value="sin(x)/x"/></div>
+      <div class="two-col">
+        <div class="field"><label class="lbl">x &rarr; a</label><input class="inp" id="lim-a" value="0"/></div>
+        <div class="field"><label class="lbl">Side</label>
+          <select class="sel" id="lim-side">
+            <option value="both">Both sides</option>
+            <option value="left">Left (x&rarr;a&minus;)</option>
+            <option value="right">Right (x&rarr;a&plus;)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="computeLimit()">Compute Limit</button>
+      <div class="result-box" id="lim-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Symbolic Limit (L&apos;H&ocirc;pital Helper)</div>
+      <div class="field"><label class="lbl">Numerator g(x)</label><input class="inp" id="lhop-g" value="sin(x)"/></div>
+      <div class="field"><label class="lbl">Denominator h(x)</label><input class="inp" id="lhop-h" value="x"/></div>
+      <div class="field"><label class="lbl">x &rarr;</label><input class="inp" id="lhop-a" value="0"/></div>
+      <button class="btn" onclick="lhopital()">Apply L&apos;H&ocirc;pital</button>
+      <div class="result-box" id="lhop-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- SYMBOLIC CALCULUS -->
+<div class="panel" id="panel-symcalc">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3a2 2 0 0 1 4 0v18a2 2 0 0 0 4 0"/><path d="M6 21a2 2 0 0 0 4 0V3"/></svg> Symbolic Calculus</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Symbolic Integration</div>
+      <div class="field"><label class="lbl">f(x)</label><input class="inp" id="si-fx" value="x^2 * sin(x)"/></div>
+      <div class="field"><label class="lbl">Variable</label><input class="inp" id="si-var" value="x"/></div>
+      <div class="btn-row">
+        <button class="btn" onclick="symIntegrate()">Integrate &int; f dx</button>
+        <button class="btn secondary" onclick="symIntegrateDefinite()">Definite Integral</button>
+      </div>
+      <div class="two-col" style="margin-top:6px">
+        <div class="field"><label class="lbl">From a</label><input class="inp" id="si-a" value="0"/></div>
+        <div class="field"><label class="lbl">To b</label><input class="inp" id="si-b" value="1"/></div>
+      </div>
+      <div class="result-box" id="si-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Symbolic Equation Solving</div>
+      <div class="field"><label class="lbl">Equation (in terms of x, e.g. x^2 - 4 = 0)</label><input class="inp" id="se-eq" value="x^3 - 6x^2 + 11x - 6 = 0"/></div>
+      <div class="field"><label class="lbl">Variable</label><input class="inp" id="se-var" value="x"/></div>
+      <button class="btn" onclick="symSolve()">Solve Symbolically</button>
+      <div class="result-box" id="se-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Partial Fraction Decomposition</div>
+      <div class="field"><label class="lbl">Numerator N(x)</label><input class="inp" id="pf-num" value="x + 3"/></div>
+      <div class="field"><label class="lbl">Denominator D(x)</label><input class="inp" id="pf-den" value="x^2 - x - 2"/></div>
+      <button class="btn" onclick="partialFrac()">Decompose</button>
+      <div class="result-box" id="pf-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Polynomial Long Division</div>
+      <div class="field"><label class="lbl">Dividend p(x)</label><input class="inp" id="pd-num" value="x^3 + 2x^2 - x + 4"/></div>
+      <div class="field"><label class="lbl">Divisor d(x)</label><input class="inp" id="pd-den" value="x - 2"/></div>
+      <button class="btn" onclick="polyLongDiv()">Divide</button>
+      <div class="result-box" id="pd-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- GRAM-SCHMIDT -->
+<div class="panel" id="panel-gramschmidt">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="20" x2="4" y2="4"/><line x1="4" y1="20" x2="20" y2="20"/><line x1="4" y1="8" x2="10" y2="20"/><line x1="10" y1="20" x2="18" y2="4"/></svg> Gram-Schmidt</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Gram-Schmidt Orthogonalization</div>
+      <div class="field"><label class="lbl">Vectors — one per line, comma-separated components</label>
+        <textarea class="inp" id="gs-vecs" rows="4">1,1,0
+1,0,1
+0,1,1</textarea>
+      </div>
+      <button class="btn" onclick="gramSchmidt()">Orthogonalize</button>
+      <div class="result-box" id="gs-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">SVD — Singular Values</div>
+      <div class="field"><label class="lbl">Matrix rows (comma-sep values, one row per line)</label>
+        <textarea class="inp" id="svd-m" rows="3">4,3
+6,3</textarea>
+      </div>
+      <button class="btn" onclick="doSVD()">Compute Singular Values</button>
+      <div class="result-box" id="svd-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cholesky Decomposition A = LL&sup2;</div>
+      <div class="field"><label class="lbl">Symmetric positive-definite matrix</label>
+        <textarea class="inp" id="chol-m" rows="3">4,2,2
+2,5,3
+2,3,6</textarea>
+      </div>
+      <button class="btn" onclick="doCholesky()">Decompose</button>
+      <div class="result-box" id="chol-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- NULL / COL SPACE -->
+<div class="panel" id="panel-linalg2">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg> Null / Column Space</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Fundamental Subspaces</div>
+      <div class="field"><label class="lbl">Matrix (rows, comma-separated)</label>
+        <textarea class="inp" id="ns-m" rows="3">1,2,3
+4,5,6
+7,8,9</textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="nullSpace()">Null Space</button>
+        <button class="btn secondary" onclick="colSpace()">Column Space</button>
+        <button class="btn secondary" onclick="rowSpace()">Row Space</button>
+      </div>
+      <div class="result-box" id="ns-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRIANGLE SOLVER -->
+<div class="panel" id="panel-triangle">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 22 2 22"/></svg> Triangle Solver</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Solve any triangle — enter any 3 known values, leave unknowns blank</div>
+      <div class="three-col">
+        <div class="field"><label class="lbl">Side a</label><input class="inp" id="tri-a" placeholder="?"/></div>
+        <div class="field"><label class="lbl">Side b</label><input class="inp" id="tri-b" placeholder="?"/></div>
+        <div class="field"><label class="lbl">Side c</label><input class="inp" id="tri-c" placeholder="?"/></div>
+      </div>
+      <div class="three-col">
+        <div class="field"><label class="lbl">Angle A (&deg;)</label><input class="inp" id="tri-A" placeholder="?"/></div>
+        <div class="field"><label class="lbl">Angle B (&deg;)</label><input class="inp" id="tri-B" placeholder="?"/></div>
+        <div class="field"><label class="lbl">Angle C (&deg;)</label><input class="inp" id="tri-C" placeholder="?"/></div>
+      </div>
+      <button class="btn" onclick="solveTri()">Solve Triangle</button>
+      <div class="result-box" id="tri-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONIC SECTIONS -->
+<div class="panel" id="panel-conics">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="9" ry="5"/></svg> Conic Sections</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Ellipse &mdash; x&sup2;/a&sup2; + y&sup2;/b&sup2; = 1</div>
+      <div class="two-col">
+        <div class="field"><label class="lbl">a (semi-major)</label><input class="inp" id="el-a" value="5"/></div>
+        <div class="field"><label class="lbl">b (semi-minor)</label><input class="inp" id="el-b" value="3"/></div>
+      </div>
+      <button class="btn" onclick="analyzeEllipse()">Analyze</button>
+      <div class="result-box" id="el-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hyperbola &mdash; x&sup2;/a&sup2; &minus; y&sup2;/b&sup2; = 1</div>
+      <div class="two-col">
+        <div class="field"><label class="lbl">a</label><input class="inp" id="hy-a" value="4"/></div>
+        <div class="field"><label class="lbl">b</label><input class="inp" id="hy-b" value="3"/></div>
+      </div>
+      <button class="btn" onclick="analyzeHyperbola()">Analyze</button>
+      <div class="result-box" id="hy-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Parabola &mdash; y = ax&sup2; + bx + c</div>
+      <div class="three-col">
+        <div class="field"><label class="lbl">a</label><input class="inp" id="pa-a" value="1"/></div>
+        <div class="field"><label class="lbl">b</label><input class="inp" id="pa-b" value="-2"/></div>
+        <div class="field"><label class="lbl">c</label><input class="inp" id="pa-c" value="1"/></div>
+      </div>
+      <button class="btn" onclick="analyzeParabola()">Analyze</button>
+      <div class="result-box" id="pa-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3D GEOMETRY -->
+<div class="panel" id="panel-geo3d">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3L3 8v8l9 5 9-5V8L12 3z"/></svg> 3D Geometry</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Plane from 3 Points</div>
+      <div class="three-col">
+        <div class="field"><label class="lbl">P1 (x,y,z)</label><input class="inp" id="pl-p1" value="1,0,0"/></div>
+        <div class="field"><label class="lbl">P2</label><input class="inp" id="pl-p2" value="0,1,0"/></div>
+        <div class="field"><label class="lbl">P3</label><input class="inp" id="pl-p3" value="0,0,1"/></div>
+      </div>
+      <button class="btn" onclick="planeFromPts()">Find Plane Equation</button>
+      <div class="result-box" id="pl-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Distance: Point to Plane</div>
+      <div class="two-col">
+        <div class="field"><label class="lbl">Point (x,y,z)</label><input class="inp" id="d2p-pt" value="2,3,4"/></div>
+        <div class="field"><label class="lbl">Plane ax+by+cz=d &mdash; enter a,b,c,d</label><input class="inp" id="d2p-pl" value="1,1,1,3"/></div>
+      </div>
+      <button class="btn" onclick="distToPlane()">Calculate Distance</button>
+      <div class="result-box" id="d2p-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">3D Solids &mdash; Volume &amp; Surface Area</div>
+      <div class="field"><label class="lbl">Shape</label>
+        <select class="sel" id="sol-type">
+          <option value="sphere">Sphere (r)</option>
+          <option value="cylinder">Cylinder (r, h)</option>
+          <option value="cone">Cone (r, h)</option>
+          <option value="torus">Torus (R, r)</option>
+          <option value="cube">Cube (a)</option>
+          <option value="box">Box (l, w, h)</option>
+          <option value="tetrahedron">Regular Tetrahedron (a)</option>
+        </select>
+      </div>
+      <div class="three-col">
+        <div class="field"><label class="lbl">Param 1</label><input class="inp" id="sol-p1" value="5"/></div>
+        <div class="field"><label class="lbl">Param 2</label><input class="inp" id="sol-p2" value="10"/></div>
+        <div class="field"><label class="lbl">Param 3</label><input class="inp" id="sol-p3" value="3"/></div>
+      </div>
+      <button class="btn" onclick="solid3D()">Calculate</button>
+      <div class="result-box" id="sol-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- GRAPH THEORY -->
+<div class="panel" id="panel-graphtheory">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="2" fill="currentColor"/><circle cx="19" cy="5" r="2" fill="currentColor"/><circle cx="5" cy="19" r="2" fill="currentColor"/><circle cx="19" cy="19" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><line x1="7" y1="5" x2="17" y2="5"/><line x1="5" y1="7" x2="5" y2="17"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="14" y1="14" x2="17" y2="17"/></svg> Graph Theory</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Adjacency Matrix — 0 = no edge, 1 = edge (or weight)</div>
+      <div class="field"><label class="lbl">Matrix (rows, comma-separated)</label>
+        <textarea class="inp" id="gt-adj" rows="5">0,1,1,0,0
+1,0,1,1,0
+1,1,0,0,1
+0,1,0,0,1
+0,0,1,1,0</textarea>
+      </div>
+      <div class="field"><label class="lbl">Node labels (optional, comma-separated)</label>
+        <input class="inp" id="gt-labels" value="A,B,C,D,E"/>
+      </div>
+      <div class="field"><label class="lbl">Start node index</label>
+        <input class="inp" id="gt-start" value="0" type="number"/>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="gtBFS()">BFS</button>
+        <button class="btn secondary" onclick="gtDFS()">DFS</button>
+        <button class="btn secondary" onclick="gtDijkstra()">Shortest Paths</button>
+        <button class="btn secondary" onclick="gtCycle()">Detect Cycle</button>
+        <button class="btn ghost" onclick="gtDraw()">Draw Graph</button>
+      </div>
+      <div class="result-box" id="gt-out" style="margin-top:9px">—</div>
+      <canvas id="gt-canvas" width="500" height="280" style="display:none;border:1px solid #ebebeb;border-radius:8px;margin-top:8px;max-width:100%;background:#fafafa"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- OFFLINE CACHE -->
+<div class="panel" id="panel-offline">
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Offline Cache</div>
+  <div class="panel-body">
+    <div class="card">
+      <div class="card-title">Service Worker Cache</div>
+      <p style="font-size:11px;color:#888;line-height:1.6;margin-bottom:10px">Cache all CDN resources to use Calculator 2 fully offline. Requires the <code style="font-size:10px;background:#f4f4f4;padding:1px 4px;border-radius:3px">sw.js</code> service worker file alongside this HTML file.</p>
+      <div id="sw-status" class="result-box" style="margin-bottom:10px">Service worker status: checking...</div>
+      <div class="btn-row">
+        <button class="btn" onclick="cacheAll()">Save All Resources For Offline</button>
+        <button class="btn secondary" onclick="clearCache()">Clear Cache</button>
+        <button class="btn secondary" onclick="checkCache()">Check Status</button>
+      </div>
+      <div class="result-box" id="cache-out" style="margin-top:9px">—</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cached Resources</div>
+      <p style="font-size:11px;color:#888;line-height:1.6;margin-bottom:10px">The following URLs will be cached for offline use:</p>
+      <div style="font-size:10px;color:#aaa;line-height:2;font-family:monospace" id="cache-list">
+        https://fonts.googleapis.com/css2?family=Inter...<br>
+        https://cdnjs.cloudflare.com/.../mathjs/11.11.0/math.js<br>
+        https://cdnjs.cloudflare.com/.../Chart.js/4.4.0/chart.umd.min.js<br>
+        https://cdnjs.cloudflare.com/.../qrcodejs/1.0.0/qrcode.min.js<br>
+        https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css<br>
+        https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js<br>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Share via URL</div>
+      <p style="font-size:11px;color:#888;line-height:1.6;margin-bottom:10px">Encode the current panel and all its input values into a shareable URL.</p>
+      <button class="btn" onclick="shareURL()">Copy Share URL</button>
+      <div class="result-box" id="share-out" style="margin-top:9px">—</div>
+    </div>
+  </div>
+</div>
+
+
 <div class="status-bar">
   <div><span class="status-dot"></span>Ready</div>
-  <div>math.js &middot; Chart.js &middot; QRCode.js</div>
+  <div>math.js &middot; Chart.js &middot; KaTeX &middot; Offline</div>
   <div>Calculator 2</div>
 </div>
 </div>
@@ -1275,7 +1621,7 @@ function toggleAngle(btn){
 function toggleFix(btn){S.fix=!S.fix;btn.classList.toggle('active');notify(S.fix?'Fixed decimals on':'Auto format');}
 
 // HISTORY
-function addHist(expr,res){S.hist.unshift({expr,res,t:new Date().toLocaleTimeString()});if(S.hist.length>200)S.hist.pop();renderHist();}
+function addHist(expr,res){saveHistToStorage();S.hist.unshift({expr,res,t:new Date().toLocaleTimeString()});if(S.hist.length>200)S.hist.pop();renderHist();}
 function renderHist(){const b=document.getElementById('hist-body');if(!S.hist.length){b.innerHTML='<div style="color:var(--text3);text-align:center;padding:40px;font-size:12px">No calculations yet.</div>';return;}b.innerHTML=S.hist.map((h,i)=>`<div class="hist-item" onclick="recallHist(${i})"><div class="hist-expr">${h.expr}</div><div class="hist-result">= ${h.res}</div><div class="hist-time">${h.t}</div></div>`).join('');}
 function recallHist(i){S.disp=S.hist[i].res;S.fresh=true;ud();notify('Recalled: '+S.hist[i].res);}
 function clearHist(){S.hist=[];renderHist();}
@@ -1305,8 +1651,12 @@ function evalSci(){
   const e=document.getElementById('sci-in').value;
   try{
     const r=math.evaluate(e,{pi:Math.PI,e:Math.E,phi:(1+Math.sqrt(5))/2});
-    set('sci-out','= '+r);
-    addHist(e,String(r));
+    const rs=String(r);
+    try{
+      const lx=toLatex(e)+' = '+(typeof r==='number'?numToLatex(r):rs);
+      setLatex('sci-out',[{latex:lx,plain:'= '+rs}]);
+    }catch(ex){ set('sci-out','= '+rs); }
+    addHist(e,rs);
   }catch(err){setE('sci-out','Error: '+err.message);}
 }
 
@@ -1326,7 +1676,9 @@ function trig(f){
       case'sinh':r=Math.sinh(rad);break;case'cosh':r=Math.cosh(rad);break;case'tanh':r=Math.tanh(rad);break;
       case'cot':r=1/Math.tan(rad);break;case'sec':r=1/Math.cos(rad);break;case'csc':r=1/Math.sin(rad);break;
     }
-    set('trig-out',f+'('+v+u+') = '+r.toPrecision(10));
+    const angleStr = u==='DEG'?`${v}^\\circ`:(u==='GRAD'?`${v}^g`:String(v));
+    const lx=`\\${f}\\!\\left(${angleStr}\\right) = ${numToLatex(r)}`;
+    setLatex('trig-out',[{latex:lx,plain:f+'('+v+u+') = '+r.toPrecision(10)}]);
   }catch(e){setE('trig-out','Error: '+e.message);}
 }
 
@@ -1334,13 +1686,21 @@ function logpow(f){
   const x=parseFloat(document.getElementById('lp-x').value);
   const b=parseFloat(document.getElementById('lp-b').value)||10;
   const n=parseFloat(document.getElementById('lp-n').value)||2;
-  let r;
+  let r,lx,plain;
   try{
-    switch(f){case'log10':r=Math.log10(x);break;case'ln':r=Math.log(x);break;case'log2':r=Math.log2(x);break;
-      case'logb':r=Math.log(x)/Math.log(b);break;case'pow':r=Math.pow(x,n);break;case'sqrt':r=Math.sqrt(x);break;
-      case'cbrt':r=Math.cbrt(x);break;case'exp':r=Math.exp(x);break;case'10x':r=Math.pow(10,x);break;
-      case'fact':r=fact(Math.round(x));break;}
-    set('lp-out',f+'('+x+') = '+r);
+    switch(f){
+      case'log10':r=Math.log10(x);lx=`\\log(${x}) = ${numToLatex(r)}`;plain=`log(${x}) = ${r}`;break;
+      case'ln':r=Math.log(x);lx=`\\ln(${x}) = ${numToLatex(r)}`;plain=`ln(${x}) = ${r}`;break;
+      case'log2':r=Math.log2(x);lx=`\\log_2(${x}) = ${numToLatex(r)}`;plain=`log2(${x}) = ${r}`;break;
+      case'logb':r=Math.log(x)/Math.log(b);lx=`\\log_{${b}}(${x}) = ${numToLatex(r)}`;plain=`log_${b}(${x}) = ${r}`;break;
+      case'pow':r=Math.pow(x,n);lx=`${x}^{${n}} = ${numToLatex(r)}`;plain=`${x}^${n} = ${r}`;break;
+      case'sqrt':r=Math.sqrt(x);lx=`\\sqrt{${x}} = ${numToLatex(r)}`;plain=`sqrt(${x}) = ${r}`;break;
+      case'cbrt':r=Math.cbrt(x);lx=`\\sqrt[3]{${x}} = ${numToLatex(r)}`;plain=`cbrt(${x}) = ${r}`;break;
+      case'exp':r=Math.exp(x);lx=`e^{${x}} = ${numToLatex(r)}`;plain=`e^${x} = ${r}`;break;
+      case'10x':r=Math.pow(10,x);lx=`10^{${x}} = ${numToLatex(r)}`;plain=`10^${x} = ${r}`;break;
+      case'fact':r=fact(Math.round(x));lx=`${Math.round(x)}! = ${r}`;plain=`${x}! = ${r}`;break;
+    }
+    setLatex('lp-out',[{latex:lx,plain}]);
   }catch(e){setE('lp-out','Error: '+e.message);}
 }
 
@@ -1358,7 +1718,19 @@ function nt(f){
       case'nPr':r='P('+n+','+m+') = '+nPr(n,m);break;
       case'fib':r='Fibonacci('+n+') = '+fib(n);break;
     }
-    set('nt-out',r);
+    // Render number theory with LaTeX where applicable
+    if(f==='nCr'){
+      setLatex('nt-out',[{latex:`\\binom{${n}}{${m}} = ${nCr(n,m)}`,plain:r}]);
+    } else if(f==='factor'){
+      const factors=pFactors(n);
+      const lx=n+' = '+factors.map(f=>{
+        const exp=factors.filter(x=>x===f).length;
+        return exp>1?`${f}^{${exp}}`:String(f);
+      }).filter((v,i,a)=>a.indexOf(v)===i).join(' \\times ');
+      setLatex('nt-out',[{latex:lx,plain:r}]);
+    } else {
+      set('nt-out',r);
+    }
   }catch(e){setE('nt-out','Error: '+e.message);}
 }
 
@@ -1376,11 +1748,20 @@ function alg(op){
   const e=document.getElementById('alg-e').value;
   const xv=document.getElementById('alg-x').value;
   try{
-    let r;
-    if(op==='simplify')r=math.simplify(e).toString();
-    else if(op==='evaluate'){const sc=xv?{x:parseFloat(xv)}:{};r=math.evaluate(e,sc);}
-    else if(op==='expand')r=math.simplify(e,[]).toString();
-    set('alg-out','= '+r);
+    let r,lx;
+    if(op==='simplify'){
+      r=math.simplify(e).toString();
+      try{lx=toLatex(e)+' = '+toLatex(r);}catch(ex){}
+    } else if(op==='evaluate'){
+      const sc=xv?{x:parseFloat(xv)}:{};
+      r=math.evaluate(e,sc);r=String(r);
+      try{lx=toLatex(e)+(xv?`\\big|_{x=${xv}}`:'')+' = '+toLatex(r);}catch(ex){}
+    } else if(op==='expand'){
+      r=math.simplify(e,[]).toString();
+      try{lx=toLatex(e)+' = '+toLatex(r);}catch(ex){}
+    }
+    if(lx) setLatex('alg-out',[{latex:lx,plain:'= '+r}]);
+    else set('alg-out','= '+r);
   }catch(err){setE('alg-out','Error: '+err.message);}
 }
 
@@ -1390,8 +1771,15 @@ function symDiff(){
   try{
     let r=e;
     for(let i=0;i<ord;i++)r=math.derivative(r,'x').toString();
-    const label=ord===1?"f'(x)":ord===2?"f''(x)":`f⁽${ord}⁾(x)`;
-    set('sym-out',label+' = '+r);
+    const label=ord===1?"f'(x)":ord===2?"f''(x)":`f^{(${ord})}(x)`;
+    const lhsLabel=ord===1?"f'(x)":ord===2?"f''(x)":ord===3?"f^{(3)}(x)":`f^{(${ord})}(x)`;
+    try{
+      const lx=`${lhsLabel} = ${toLatex(r)}`;
+      setLatex('sym-out',[
+        {label:'Input', latex:'f(x) = '+toLatex(e), plain:'f(x) = '+e},
+        {label:'Result', latex:lx, plain:label+' = '+r}
+      ]);
+    }catch(ex){ set('sym-out',label+' = '+r); }
   }catch(err){setE('sym-out','Error: '+err.message);}
 }
 
@@ -1400,7 +1788,11 @@ function ratExpr(op){
   const d=document.getElementById('rat-d').value;
   try{
     const r=math.simplify('('+n+')/('+d+')');
-    set('rat-out','('+n+') / ('+d+') = '+r.toString());
+    const rs=r.toString();
+    try{
+      const lx=`\\frac{${toLatex(n)}}{${toLatex(d)}} = ${toLatex(rs)}`;
+      setLatex('rat-out',[{latex:lx,plain:'('+n+') / ('+d+') = '+rs}]);
+    }catch(ex){set('rat-out','('+n+') / ('+d+') = '+rs);}
   }catch(e){setE('rat-out','Error: '+e.message);}
 }
 
@@ -1435,12 +1827,20 @@ function solveEq(){
   const vn=document.getElementById('eqs-v').value.trim()||'x';
   try{
     if(expr.includes('='))expr='('+expr.split('=')[0]+')-('+expr.split('=')[1]+')';
-    let out='';
-    try{out+='Simplified: '+math.simplify(expr).toString()+'\n\n';}catch(e){}
     const roots=numRoots(expr,vn);
-    if(roots.length){out+='Roots:\n'+roots.map((r,i)=>`  ${vn}${i+1} = ${r.toPrecision(10)}`).join('\n');}
-    else out+='No real roots found in [-200, 200]';
-    set('eqs-out',out);
+    const rows=[];
+    try{
+      const simp=math.simplify(expr).toString();
+      rows.push({label:'Expression', latex:toLatex(simp), plain:simp});
+    }catch(e){}
+    if(roots.length){
+      roots.forEach((r,i)=>{
+        rows.push({latex:`${vn}_{${i+1}} = ${numToLatex(r)}`, plain:`${vn}${i+1} = ${r.toPrecision(10)}`});
+      });
+    } else {
+      rows.push({plain:'No real roots found in [−200, 200]'});
+    }
+    setLatex('eqs-out', rows);
   }catch(e){setE('eqs-out','Error: '+e.message);}
 }
 
@@ -1461,9 +1861,12 @@ function solveSys(){
       try{bv.push(parseFloat(math.evaluate(rhs,{})));}catch(e){bv.push(parseFloat(rhs)||0);}
     }
     const sol=math.lusolve(math.matrix(A),math.matrix(bv));
-    let out='Solution:\n';
-    for(let i=0;i<n;i++){const v=Array.isArray(sol[i])?sol[i][0]:sol[i];out+=`  ${vars[i]} = ${parseFloat(v).toPrecision(10)}\n`;}
-    set('sys-out',out);
+    const rows=[{label:'Solution'}];
+    for(let i=0;i<n;i++){
+      const v=Array.isArray(sol[i])?sol[i][0]:sol[i];
+      rows.push({latex:`${vars[i]} = ${numToLatex(parseFloat(v))}`, plain:`${vars[i]} = ${parseFloat(v).toPrecision(10)}`});
+    }
+    setLatex('sys-out', rows);
   }catch(e){setE('sys-out','Error: '+e.message+'\n\nTip: Need equal number of equations and unknowns.');}
 }
 
@@ -1499,17 +1902,21 @@ function polyRoots(){
   const expr=document.getElementById('poly-e').value;
   try{
     const roots=numRoots(expr);
-    let out='Polynomial: '+expr+'\n\n';
-    if(!roots.length)out+='No real roots in [-200,200].\n';
-    else{
-      out+=`Real Roots (${roots.length}):\n`;
+    const rows=[];
+    try{
+      const simp=math.simplify(expr).toString();
+      rows.push({label:'Polynomial', latex:'p(x) = '+toLatex(simp), plain:simp});
+    }catch(e){rows.push({label:'Polynomial', plain:expr});}
+    if(!roots.length){
+      rows.push({plain:'No real roots found in [−200, 200]'});
+    } else {
+      rows.push({label:`Real roots (${roots.length})`});
       roots.forEach((r,i)=>{
-        const v=math.evaluate(expr,{x:r});
-        out+=`  x${i+1} = ${r.toPrecision(10)}  [f(x) ≈ ${v.toPrecision(4)}]\n`;
+        const vval=math.evaluate(expr,{x:r});
+        rows.push({latex:`x_{${i+1}} = ${numToLatex(r)}`, plain:`x${i+1} = ${r.toPrecision(10)}  [f(x)≈${vval.toPrecision(4)}]`});
       });
     }
-    try{out+='\nSimplified: '+math.simplify(expr).toString();}catch(e){}
-    set('poly-out',out);
+    setLatex('poly-out', rows);
   }catch(e){setE('poly-out','Error: '+e.message);}
 }
 
@@ -1518,12 +1925,26 @@ function quadratic(){
   const b=parseFloat(document.getElementById('qb').value);
   const c=parseFloat(document.getElementById('qc').value);
   const D=b*b-4*a*c;
-  let out=`ax²+bx+c=0: a=${a}, b=${b}, c=${c}\nΔ = ${D}\n\n`;
-  if(D>0){const x1=(-b+Math.sqrt(D))/(2*a),x2=(-b-Math.sqrt(D))/(2*a);out+=`Two real roots:\n  x₁ = ${x1.toPrecision(10)}\n  x₂ = ${x2.toPrecision(10)}\n  Factored: ${a}(x-${x1.toPrecision(5)})(x-${x2.toPrecision(5)})`;}
-  else if(D===0){const x=-b/(2*a);out+=`Double root: x = ${x.toPrecision(10)}`;}
-  else{const re=-b/(2*a),im=Math.sqrt(-D)/(2*a);out+=`Complex roots:\n  x₁ = ${re.toPrecision(8)} + ${im.toPrecision(8)}i\n  x₂ = ${re.toPrecision(8)} - ${im.toPrecision(8)}i`;}
-  out+=`\n\nVertex: (${(-b/(2*a)).toPrecision(6)}, ${(c-b*b/(4*a)).toPrecision(6)})`;
-  set('quad-out',out);
+  const polyLx=`${a}x^2 ${b>=0?'+':''}${b}x ${c>=0?'+':''}${c} = 0`;
+  const discLx=`\\Delta = b^2 - 4ac = ${b}^2 - 4(${a})(${c}) = ${D}`;
+  const rows=[
+    {label:'Equation', latex:polyLx, plain:`${a}x²+${b}x+${c}=0`},
+    {label:'Discriminant', latex:discLx, plain:`Δ = ${D}`},
+  ];
+  if(D>0){
+    const x1=(-b+Math.sqrt(D))/(2*a),x2=(-b-Math.sqrt(D))/(2*a);
+    rows.push({label:'Roots', latex:`x_1 = \\frac{-b+\\sqrt{\\Delta}}{2a} = ${numToLatex(x1)}, \\quad x_2 = ${numToLatex(x2)}`, plain:`x₁=${x1.toPrecision(8)}, x₂=${x2.toPrecision(8)}`});
+    rows.push({label:'Factored', latex:`${a}(x - ${x1.toPrecision(5)})(x - ${x2.toPrecision(5)})`, plain:`${a}(x-${x1.toPrecision(5)})(x-${x2.toPrecision(5)})`});
+  } else if(D===0){
+    const x=-b/(2*a);
+    rows.push({label:'Double root', latex:`x = \\frac{-b}{2a} = ${numToLatex(x)}`, plain:`x = ${x.toPrecision(10)}`});
+  } else {
+    const re=-b/(2*a),im=Math.sqrt(-D)/(2*a);
+    rows.push({label:'Complex roots', latex:`x_{1,2} = ${numToLatex(re)} \\pm ${numToLatex(im)}i`, plain:`x₁=${re.toPrecision(6)}+${im.toPrecision(6)}i, x₂=${re.toPrecision(6)}-${im.toPrecision(6)}i`});
+  }
+  const vx=-b/(2*a), vy=c-b*b/(4*a);
+  rows.push({label:'Vertex', latex:`V = \\left(${numToLatex(vx)},\\; ${numToLatex(vy)}\\right)`, plain:`Vertex: (${vx.toPrecision(6)}, ${vy.toPrecision(6)})`});
+  setLatex('quad-out', rows);
 }
 
 function polyFromRoots(){
@@ -1531,7 +1952,13 @@ function polyFromRoots(){
   try{
     let poly='1';
     for(const r of rs)poly=math.simplify('('+poly+')*(x-('+r+'))').toString();
-    set('roots-out','Polynomial: '+math.simplify(poly).toString()+'\nDegree: '+rs.length);
+    const simplified=math.simplify(poly).toString();
+    try{
+      setLatex('roots-out',[
+        {label:'Polynomial', latex:'p(x) = '+toLatex(simplified), plain:simplified},
+        {plain:`Degree: ${rs.length}`}
+      ]);
+    }catch(ex){set('roots-out','Polynomial: '+simplified+'\nDegree: '+rs.length);}
   }catch(e){setE('roots-out','Error: '+e.message);}
 }
 
@@ -1637,21 +2064,24 @@ function parseV(id){return document.getElementById(id).value.split(',').map(Numb
 function vec(op){
   const a=parseV('va'),b=parseV('vb');
   try{
-    let out;
+    let lx,plain;
+    const va=`\\begin{pmatrix}${a.join('\\\\')}\\end{pmatrix}`;
+    const vb=`\\begin{pmatrix}${b.join('\\\\')}\\end{pmatrix}`;
     switch(op){
-      case'dot':out='A·B = '+math.dot(a,b);break;
-      case'cross':{if(a.length!==3||b.length!==3)throw new Error('Cross product requires 3D');const c=math.cross(a,b);out='A×B = ['+c.map(v=>v.toFixed(6)).join(', ')+']';break;}
-      case'add':out='A+B = ['+math.add(a,b).map(v=>v.toFixed(6)).join(', ')+']';break;
-      case'sub':out='A-B = ['+math.subtract(a,b).map(v=>v.toFixed(6)).join(', ')+']';break;
-      case'magA':{const m=Math.sqrt(a.reduce((s,v)=>s+v*v,0));out='|A| = '+m.toPrecision(10);break;}
-      case'magB':{const m=Math.sqrt(b.reduce((s,v)=>s+v*v,0));out='|B| = '+m.toPrecision(10);break;}
-      case'unitA':{const m=Math.sqrt(a.reduce((s,v)=>s+v*v,0));out='Â = ['+a.map(v=>(v/m).toPrecision(6)).join(', ')+']';break;}
-      case'unitB':{const m=Math.sqrt(b.reduce((s,v)=>s+v*v,0));out='B̂ = ['+b.map(v=>(v/m).toPrecision(6)).join(', ')+']';break;}
-      case'angle':{const d=math.dot(a,b),mA=Math.sqrt(a.reduce((s,v)=>s+v*v,0)),mB=Math.sqrt(b.reduce((s,v)=>s+v*v,0));const ang=Math.acos(d/(mA*mB));out=`Angle = ${(ang*180/Math.PI).toPrecision(8)}° (${ang.toPrecision(8)} rad)`;break;}
-      case'projAB':{const d=math.dot(a,b),mB2=b.reduce((s,v)=>s+v*v,0);const p=b.map(v=>v*d/mB2);out='Proj(A→B) = ['+p.map(v=>v.toPrecision(6)).join(', ')+']  |Proj| = '+Math.sqrt(p.reduce((s,v)=>s+v*v,0)).toPrecision(8);break;}
-      case'outer':{const o=a.map(ai=>b.map(bi=>ai*bi));out='A⊗B =\n'+o.map(r=>'  ['+r.map(v=>v.toPrecision(4)).join('  ')+']').join('\n');break;}
+      case'dot':{const d=math.dot(a,b);lx=`\\mathbf{a}\\cdot\\mathbf{b}=${numToLatex(d)}`;plain=`A·B = ${d}`;break;}
+      case'cross':{if(a.length!==3||b.length!==3)throw new Error('Cross product requires 3D');const c=math.cross(a,b);lx=`\\mathbf{a}\\times\\mathbf{b}=\\begin{pmatrix}${c.map(v=>v.toFixed(4)).join('\\\\')}\\end{pmatrix}`;plain='A×B = ['+c.map(v=>v.toFixed(6)).join(', ')+']';break;}
+      case'add':{const s=math.add(a,b);lx=va+'+'+vb+'=\\begin{pmatrix}'+s.map(v=>v.toFixed(4)).join('\\\\')+'\\end{pmatrix}';plain='A+B = ['+s.map(v=>v.toFixed(6)).join(', ')+']';break;}
+      case'sub':{const s=math.subtract(a,b);lx=va+'-'+vb+'=\\begin{pmatrix}'+s.map(v=>v.toFixed(4)).join('\\\\')+'\\end{pmatrix}';plain='A−B = ['+s.map(v=>v.toFixed(6)).join(', ')+']';break;}
+      case'magA':{const m=Math.sqrt(a.reduce((s,v)=>s+v*v,0));lx=`\\|\\mathbf{a}\\|=${numToLatex(m)}`;plain=`|A| = ${m.toPrecision(10)}`;break;}
+      case'magB':{const m=Math.sqrt(b.reduce((s,v)=>s+v*v,0));lx=`\\|\\mathbf{b}\\|=${numToLatex(m)}`;plain=`|B| = ${m.toPrecision(10)}`;break;}
+      case'unitA':{const m=Math.sqrt(a.reduce((s,v)=>s+v*v,0));const u=a.map(v=>v/m);lx=`\\hat{a}=\\begin{pmatrix}${u.map(v=>numToLatex(v)).join('\\\\')}\\end{pmatrix}`;plain='Â = ['+u.map(v=>v.toPrecision(6)).join(', ')+']';break;}
+      case'unitB':{const m=Math.sqrt(b.reduce((s,v)=>s+v*v,0));const u=b.map(v=>v/m);lx=`\\hat{b}=\\begin{pmatrix}${u.map(v=>numToLatex(v)).join('\\\\')}\\end{pmatrix}`;plain='B̂ = ['+u.map(v=>v.toPrecision(6)).join(', ')+']';break;}
+      case'angle':{const d=math.dot(a,b),mA=Math.sqrt(a.reduce((s,v)=>s+v*v,0)),mB=Math.sqrt(b.reduce((s,v)=>s+v*v,0));const ang=Math.acos(d/(mA*mB));lx=`\\theta=\\arccos\\!\\left(\\frac{\\mathbf{a}\\cdot\\mathbf{b}}{\\|a\\|\\|b\\|}\\right)=${numToLatex(ang*180/Math.PI)}^\\circ`;plain=`Angle = ${(ang*180/Math.PI).toPrecision(8)}° (${ang.toPrecision(8)} rad)`;break;}
+      case'projAB':{const d=math.dot(a,b),mB2=b.reduce((s,v)=>s+v*v,0);const p=b.map(v=>v*d/mB2);lx=`\\text{proj}_{\\mathbf{b}}\\mathbf{a}=\\begin{pmatrix}${p.map(v=>numToLatex(v)).join('\\\\')}\\end{pmatrix}`;plain='Proj(A→B) = ['+p.map(v=>v.toPrecision(6)).join(', ')+']';break;}
+      case'outer':{const o=a.map(ai=>b.map(bi=>ai*bi));plain='A⊗B =\n'+o.map(r=>'  ['+r.map(v=>v.toPrecision(4)).join('  ')+']').join('\n');lx=null;break;}
     }
-    set('vec-out',out);
+    if(lx) setLatex('vec-out',[{latex:lx, plain}]);
+    else set('vec-out',plain);
   }catch(e){setE('vec-out','Error: '+e.message);}
 }
 
@@ -1660,11 +2090,15 @@ function coordConv(d){
     if(d==='r2p'){
       const x=parseFloat(document.getElementById('rx').value),y=parseFloat(document.getElementById('ry').value);
       const r=Math.sqrt(x*x+y*y),t=Math.atan2(y,x)*180/Math.PI;
-      set('coord-out',`r = ${r.toPrecision(8)}\nθ = ${t.toPrecision(8)}°`);
+      setLatex('coord-out',[
+        {latex:`r = ${numToLatex(r)}, \\quad \\theta = ${numToLatex(t)}^\\circ`, plain:`r=${r.toPrecision(8)}, θ=${t.toPrecision(8)}°`}
+      ]);
       document.getElementById('pr').value=r.toPrecision(6);document.getElementById('pt').value=t.toPrecision(6);
     }else{
       const r=parseFloat(document.getElementById('pr').value),t=parseFloat(document.getElementById('pt').value)*Math.PI/180;
-      set('coord-out',`x = ${(r*Math.cos(t)).toPrecision(8)}\ny = ${(r*Math.sin(t)).toPrecision(8)}`);
+      setLatex('coord-out',[
+        {latex:`x = ${numToLatex(r*Math.cos(t))}, \\quad y = ${numToLatex(r*Math.sin(t))}`, plain:`x=${( r*Math.cos(t)).toPrecision(8)}, y=${(r*Math.sin(t)).toPrecision(8)}`}
+      ]);
     }
   }catch(e){setE('coord-out','Error: '+e.message);}
 }
@@ -1685,9 +2119,21 @@ function numDiff(){
     else if(ord===2)r=(efn(expr,x+h)-2*efn(expr,x)+efn(expr,x-h))/(h*h);
     else if(ord===3)r=(efn(expr,x+2*h)-2*efn(expr,x+h)+2*efn(expr,x-h)-efn(expr,x-2*h))/(2*h*h*h);
     else r=(efn(expr,x+2*h)-4*efn(expr,x+h)+6*efn(expr,x)-4*efn(expr,x-h)+efn(expr,x-2*h))/(h*h*h*h);
-    let out=`f(x) = ${expr}\nx = ${x}, h = ${h}\n\nf(${x}) = ${efn(expr,x).toPrecision(10)}\nf${"'".repeat(ord)}(${x}) ≈ ${r.toPrecision(10)}`;
-    try{let s=expr;for(let i=0;i<ord;i++)s=math.derivative(s,'x').toString();const sv=efn(s,x);out+=`\n\nSymbolic: f${"'".repeat(ord)}(x) = ${s}\nSymbolic value: ${sv.toPrecision(10)}\nError: ${Math.abs(r-sv).toExponential(3)}`;}catch(e){}
-    set('df-out',out);addHist(`d${ord}/dx${ord} ${expr} at x=${x}`,r.toPrecision(8));
+    const prime="'".repeat(ord);
+    const ordTex=ord===1?"":ord===2?"^{(2)}":ord===3?"^{(3)}":`^{(${ord})}`;
+    const rows=[
+      {label:'Function', latex:'f(x) = '+toLatex(expr), plain:'f(x) = '+expr},
+      {label:`f${prime}(${x})`, latex:`f${ordTex}(${x}) \\approx ${numToLatex(r)}`, plain:`f${prime}(${x}) ≈ ${r.toPrecision(10)}`},
+    ];
+    try{
+      let s=expr;
+      for(let i=0;i<ord;i++)s=math.derivative(s,'x').toString();
+      const sv=efn(s,x);
+      rows.push({label:'Symbolic f'+prime+'(x)', latex:`f${ordTex}(x) = ${toLatex(s)}`, plain:`f${prime}(x) = ${s}`});
+      rows.push({plain:`Symbolic value: ${sv.toPrecision(10)} | Error: ${Math.abs(r-sv).toExponential(3)}`});
+    }catch(e){}
+    setLatex('df-out',rows);
+    addHist(`d${ord}/dx${ord} ${expr} at x=${x}`,r.toPrecision(8));
   }catch(e){setE('df-out','Error: '+e.message);}
 }
 
@@ -1750,9 +2196,13 @@ function integrate(method){
     else if(method==='trap')r=trap(fn,a,b,n);
     else if(method==='gl')r=gl5(fn,a,b);
     else r=mid(fn,a,b,n);
-    const s=simp(fn,a,b,n%2===0?n:n+1),tr=trap(fn,a,b,n),g=gl5(fn,a,b);
-    let out=`∫[${a},${b}] ${expr} dx\n\nMethod: ${method} → ${r.toPrecision(12)}\n\nAll methods:\n  Simpson: ${s.toPrecision(10)}\n  Trapezoid: ${tr.toPrecision(10)}\n  Gauss-Legendre: ${g.toPrecision(10)}\n  Midpoint: ${mid(fn,a,b,n).toPrecision(10)}`;
-    set('int-out',out);addHist(`∫[${a},${b}] ${expr}dx`,r.toPrecision(8));
+    const s2=simp(fn,a,b,n%2===0?n:n+1),tr=trap(fn,a,b,n),g=gl5(fn,a,b),mi=mid(fn,a,b,n);
+    const intLx=`\\int_{${a}}^{${b}} ${toLatex(expr)}\\, dx = ${numToLatex(r)}`;
+    setLatex('int-out',[
+      {label:'Result', latex:intLx, plain:`∫[${a},${b}] ${expr} dx = ${r.toPrecision(12)}`},
+      {label:'All methods', plain:`Simpson: ${s2.toPrecision(10)}\nTrapezoid: ${tr.toPrecision(10)}\nGauss-Legendre: ${g.toPrecision(10)}\nMidpoint: ${mi.toPrecision(10)}`}
+    ]);
+    addHist(`∫[${a},${b}] ${expr}dx`,r.toPrecision(8));
   }catch(e){setE('int-out','Error: '+e.message);}
 }
 
@@ -1762,8 +2212,17 @@ function improper(){
   const bv=document.getElementById('imp-b').value;
   try{
     const fn=x=>efn(expr,x);
-    if(bv==='Inf'){const r=simp(fn,a,50,1000)+simp(fn,50,200,2000);set('imp-out',`∫[${a},∞] ${expr} dx ≈ ${r.toPrecision(10)}\n(Truncated at 200, may have error)`)}
-    else{set('imp-out',`∫[${a},${bv}] = ${simp(fn,a,parseFloat(bv),10000).toPrecision(12)}`);}
+    let r,lx,plain;
+    if(bv==='Inf'){
+      r=simp(fn,a,50,1000)+simp(fn,50,200,2000);
+      lx=`\\int_{${a}}^{\\infty} ${toLatex(expr)}\\, dx \\approx ${numToLatex(r)}`;
+      plain=`∫[${a},∞] ${expr} dx ≈ ${r.toPrecision(10)}`;
+    } else {
+      r=simp(fn,a,parseFloat(bv),10000);
+      lx=`\\int_{${a}}^{${bv}} ${toLatex(expr)}\\, dx = ${numToLatex(r)}`;
+      plain=`∫[${a},${bv}] = ${r.toPrecision(12)}`;
+    }
+    setLatex('imp-out',[{latex:lx, plain}]);
   }catch(e){setE('imp-out','Error: '+e.message);}
 }
 
@@ -2213,7 +2672,7 @@ function fmtC(r,i){const im=Math.abs(i)<1e-10?'':(i>0?` + ${i.toPrecision(8)}i`:
 function cx(op){
   const {r:a,i:b}=gc1();const {r:c,i:d}=gc2();const pn=parseInt(document.getElementById('cx-n').value)||2;
   try{
-    let r,ii,out;
+    let r,ii,lx,plain;
     switch(op){
       case'add':r=a+c;ii=b+d;break;case'sub':r=a-c;ii=b-d;break;
       case'mul':r=a*c-b*d;ii=a*d+b*c;break;
@@ -2221,31 +2680,49 @@ function cx(op){
       case'pow':{const mag=Math.sqrt(a*a+b*b),th=Math.atan2(b,a);r=Math.pow(mag,pn)*Math.cos(th*pn);ii=Math.pow(mag,pn)*Math.sin(th*pn);break;}
       case'sqrt1':{const mag=Math.sqrt(a*a+b*b),th=Math.atan2(b,a);r=Math.sqrt(mag)*Math.cos(th/2);ii=Math.sqrt(mag)*Math.sin(th/2);break;}
       case'conj1':r=a;ii=-b;break;
-      case'mag1':set('cx-out',`|z₁| = ${Math.sqrt(a*a+b*b).toPrecision(10)}`);return;
-      case'arg1':set('cx-out',`arg(z₁) = ${(Math.atan2(b,a)*180/Math.PI).toPrecision(8)}°`);return;
-      case'polar1':{const mag=Math.sqrt(a*a+b*b),th=Math.atan2(b,a);set('cx-out',`z₁ = ${mag.toPrecision(8)}·e^(${th.toPrecision(6)}i)\nPolar: r=${mag.toPrecision(8)}, θ=${(th*180/Math.PI).toPrecision(8)}°`);return;}
+      case'mag1':{const m=Math.sqrt(a*a+b*b);setLatex('cx-out',[{latex:`|z_1|=${numToLatex(m)}`,plain:`|z₁| = ${m.toPrecision(10)}`}]);return;}
+      case'arg1':{const th=Math.atan2(b,a)*180/Math.PI;setLatex('cx-out',[{latex:`\\arg(z_1)=${numToLatex(th)}^\\circ`,plain:`arg(z₁) = ${th.toPrecision(8)}°`}]);return;}
+      case'polar1':{const mag=Math.sqrt(a*a+b*b),th=Math.atan2(b,a);setLatex('cx-out',[{latex:`z_1=${numToLatex(mag)}\\cdot e^{${numToLatex(th)}i}`,plain:`z₁ = ${mag.toPrecision(8)}·e^(${th.toPrecision(6)}i)`},{plain:`r=${mag.toPrecision(8)}, θ=${(th*180/Math.PI).toPrecision(8)}°`}]);return;}
       case'exp1':{const er=Math.exp(a);r=er*Math.cos(b);ii=er*Math.sin(b);break;}
       case'ln1':{const mag=Math.sqrt(a*a+b*b);r=Math.log(mag);ii=Math.atan2(b,a);break;}
       case'sin1':r=Math.sin(a)*Math.cosh(b);ii=Math.cos(a)*Math.sinh(b);break;
       case'cos1':r=Math.cos(a)*Math.cosh(b);ii=-Math.sin(a)*Math.sinh(b);break;
     }
-    const mag=Math.sqrt(r*r+ii*ii);set('cx-out',`Result: ${fmtC(r,ii)}\nModulus: ${mag.toPrecision(8)}\nArgument: ${(Math.atan2(ii,r)*180/Math.PI).toPrecision(6)}°`);
+    const mag=Math.sqrt(r*r+ii*ii);
+    const resLx=fmtCLx(r,ii);
+    setLatex('cx-out',[
+      {label:'Result', latex:resLx, plain:fmtC(r,ii)},
+      {latex:`|z|=${numToLatex(mag)},\\quad \\arg(z)=${numToLatex(Math.atan2(ii,r)*180/Math.PI)}^\\circ`, plain:`|z|=${mag.toPrecision(8)}, arg=${(Math.atan2(ii,r)*180/Math.PI).toPrecision(6)}°`}
+    ]);
   }catch(e){setE('cx-out','Error: '+e.message);}
+}
+
+function fmtCLx(r,i){
+  const rs=numToLatex(r);
+  if(Math.abs(i)<1e-12) return rs;
+  const is=numToLatex(Math.abs(i));
+  return i>=0?`${rs}+${is}i`:`${rs}-${is}i`;
 }
 
 function cxEval(){
   try{
     const r=math.evaluate(document.getElementById('cxe-in').value);
     const re=typeof r==='object'?r.re:r,im=typeof r==='object'?r.im:0;
-    set('cxe-out',`= ${fmtC(re,im)}\n|z| = ${Math.sqrt(re*re+im*im).toPrecision(8)}\narg = ${(Math.atan2(im,re)*180/Math.PI).toPrecision(8)}°`);
+    setLatex('cxe-out',[
+      {latex:fmtCLx(re,im), plain:fmtC(re,im)},
+      {latex:`|z|=${numToLatex(Math.sqrt(re*re+im*im))},\\quad \\arg=${numToLatex(Math.atan2(im,re)*180/Math.PI)}^\\circ`, plain:`|z|=${Math.sqrt(re*re+im*im).toPrecision(8)}`}
+    ]);
   }catch(e){setE('cxe-out','Error: '+e.message);}
 }
 
 function rootsUnity(){
   const n=parseInt(document.getElementById('unity-n').value);
-  let out=`${n}-th Roots of Unity (z^${n}=1):\n\n`;
-  for(let k=0;k<n;k++){const t=2*Math.PI*k/n;const r=Math.cos(t),i=Math.sin(t);out+=`  z${k} = ${fmtC(r,i)}  [θ=${(t*180/Math.PI).toPrecision(4)}°]\n`;}
-  set('unity-out',out);
+  const rows=[{label:`${n}-th Roots of Unity  (z${n} = 1)`}];
+  for(let k=0;k<n;k++){
+    const t=2*Math.PI*k/n;const re=Math.cos(t),im=Math.sin(t);
+    rows.push({latex:`z_{${k}}=${fmtCLx(re,im)}`, plain:`z${k} = ${fmtC(re,im)}`});
+  }
+  setLatex('unity-out',rows);
 }
 
 // ============================================================
@@ -2602,8 +3079,148 @@ function genQR(cid,url){
 // ============================================================
 // HELPERS
 // ============================================================
-function set(id,txt){const el=document.getElementById(id);el.textContent=txt;el.className='result-box';}
-function setE(id,txt){const el=document.getElementById(id);el.textContent=txt;el.className='result-box error';}
+// ============================================================
+// LATEX RENDERING — KaTeX-powered result display
+// ============================================================
+
+// Convert math.js expression string → LaTeX
+function toLatex(expr){
+  if(typeof expr !== 'string') expr = String(expr);
+  try{
+    // Try math.js built-in LaTeX export first
+    const node = math.parse(expr);
+    return node.toTex({parenthesis:'auto'});
+  }catch(e){
+    // Fallback: manual conversion
+    return exprToLatex(expr);
+  }
+}
+
+function exprToLatex(s){
+  s = s.trim();
+  // Replace ** with ^ for powers
+  s = s.replace(/\*\*/g,'^');
+  // x^2 → x^{2} for multi-digit
+  s = s.replace(/\^(\d{2,})/g,'^{$1}');
+  // sqrt(...) → \sqrt{...}
+  s = s.replace(/sqrt\(([^)]+)\)/g,'\\sqrt{$1}');
+  // cbrt(...) → \sqrt[3]{...}
+  s = s.replace(/cbrt\(([^)]+)\)/g,'\\sqrt[3]{$1}');
+  // trig functions
+  ['sin','cos','tan','cot','sec','csc','asin','acos','atan','sinh','cosh','tanh'].forEach(fn=>{
+    s = s.replace(new RegExp(fn+'\\(','g'),'\\\\'+fn+'(');
+  });
+  s = s.replace(/\\asin/g,'\\arcsin').replace(/\\acos/g,'\\arccos').replace(/\\atan/g,'\\arctan');
+  // log → \ln or \log
+  s = s.replace(/\bln\(/g,'\\ln(');
+  s = s.replace(/\blog\(/g,'\\log(');
+  // pi, e
+  s = s.replace(/\bpi\b/g,'\\pi');
+  // fractions: a/b where a,b are simple
+  s = s.replace(/(\w+)\s*\/\s*(\w+)/g,'\\frac{$1}{$2}');
+  // * → \cdot or space
+  s = s.replace(/\s*\*\s*/g,' \\cdot ');
+  // infinity
+  s = s.replace(/Infinity|∞/g,'\\infty');
+  return s;
+}
+
+// Render a LaTeX string into a container element
+function renderKatex(el, latexStr, displayMode=true){
+  if(typeof katex === 'undefined') return null;
+  try{
+    const wrapper = document.createElement('span');
+    wrapper.className = 'katex-block';
+    katex.render(latexStr, wrapper, {
+      displayMode,
+      throwOnError: false,
+      errorColor: '#c0392b',
+      trust: true,
+      strict: false
+    });
+    el.appendChild(wrapper);
+    return wrapper;
+  }catch(e){
+    return null;
+  }
+}
+
+// Build a structured result block with optional LaTeX
+// rows = [{label, latex, plain, numeric}]
+function setLatex(id, rows, isError=false){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = '';
+  el.className = 'result-box latex' + (isError ? ' error' : '');
+
+  if(typeof katex === 'undefined'){
+    // KaTeX not loaded yet — fall back to plain text
+    el.className = 'result-box' + (isError ? ' error' : '');
+    el.textContent = rows.map(r => (r.label?r.label+': ':'')+( r.plain||r.latex||'')).join('\n');
+    return;
+  }
+
+  rows.forEach(row => {
+    if(row.label){
+      const lbl = document.createElement('span');
+      lbl.className = 'result-label';
+      lbl.textContent = row.label;
+      el.appendChild(lbl);
+    }
+    if(row.latex){
+      const ok = renderKatex(el, row.latex, true);
+      if(!ok && row.plain){
+        const p = document.createElement('div');
+        p.className = 'result-plain';
+        p.textContent = row.plain;
+        el.appendChild(p);
+      }
+    } else if(row.plain){
+      const p = document.createElement('div');
+      p.className = 'result-plain';
+      p.textContent = row.plain;
+      el.appendChild(p);
+    }
+    if(row.numeric !== undefined){
+      const n = document.createElement('div');
+      n.className = 'result-plain';
+      n.style.cssText = 'color:#888;font-size:10px;margin-top:2px';
+      n.textContent = '≈ ' + row.numeric;
+      el.appendChild(n);
+    }
+  });
+}
+
+// Simple set for plain text (unchanged sections)
+function set(id,txt){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.className='result-box';
+  el.textContent=txt;
+}
+function setE(id,txt){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.className='result-box error';
+  el.textContent=txt;
+}
+
+// Convenience: set a single LaTeX expression with optional plain fallback + numeric
+function setLx(id, label, latexExpr, plainFallback, numeric){
+  setLatex(id,[{label, latex:latexExpr, plain:plainFallback, numeric}]);
+}
+
+// Number → nice LaTeX fraction or decimal
+function numToLatex(n, tol=1e-9){
+  if(!isFinite(n)) return n < 0 ? '-\\infty' : '\\infty';
+  // Try to express as fraction p/q with small q
+  for(let q=1;q<=1000;q++){
+    const p=Math.round(n*q);
+    if(Math.abs(p/q-n)<tol) return q===1?String(p):`\\frac{${p}}{${q}}`;
+  }
+  const s = n.toPrecision(10).replace(/\.?0+$/,'');
+  return s;
+}
 
 function notify(msg){
   const el=document.createElement('div');el.className='notif';el.textContent=msg;
@@ -2613,6 +3230,961 @@ function notify(msg){
 // ============================================================
 // INIT
 // ============================================================
+
+// ============================================================
+// PERSISTENT HISTORY — localStorage
+// ============================================================
+function saveHistToStorage(){
+  try{ localStorage.setItem('calc2_hist', JSON.stringify(S.hist.slice(0,200))); }catch(e){}
+}
+function loadHistFromStorage(){
+  try{
+    const h = localStorage.getItem('calc2_hist');
+    if(h){ const parsed = JSON.parse(h); if(Array.isArray(parsed)){ S.hist = parsed; renderHist(); } }
+  }catch(e){}
+}
+
+// ============================================================
+// SHARE VIA URL
+// ============================================================
+function shareURL(){
+  const panel = document.querySelector('.panel.active');
+  if(!panel){ set('share-out','No active panel.'); return; }
+  const id = panel.id.replace('panel-','');
+  const inputs = {};
+  panel.querySelectorAll('input[id],select[id],textarea[id]').forEach(el=>{
+    if(el.value && el.value.trim()) inputs[el.id] = el.value;
+  });
+  const hash = '#' + id + '|' + encodeURIComponent(JSON.stringify(inputs));
+  const url = location.href.split('#')[0] + hash;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>{
+      set('share-out','Copied to clipboard:\n'+url);
+      notify('URL copied to clipboard');
+    }).catch(()=>{ set('share-out', url); });
+  } else {
+    set('share-out', url);
+  }
+}
+
+function restoreFromURL(){
+  const hash = location.hash.slice(1);
+  if(!hash) return;
+  const [panelId, data] = hash.split('|');
+  if(panelId){
+    const el = document.querySelector(`.nav-item[onclick*="'${panelId}'"]`);
+    if(el){ nav(panelId, el); }
+  }
+  if(data){
+    try{
+      const inputs = JSON.parse(decodeURIComponent(data));
+      Object.entries(inputs).forEach(([id,val])=>{
+        const el = document.getElementById(id);
+        if(el) el.value = val;
+      });
+    }catch(e){}
+  }
+}
+
+// ============================================================
+// OFFLINE CACHE / SERVICE WORKER
+// ============================================================
+const SW_URLS = [
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap',
+  'https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2',
+];
+
+function initSW(){
+  const statusEl = document.getElementById('sw-status');
+  if(!('serviceWorker' in navigator)){
+    if(statusEl) statusEl.textContent = 'Service worker: not supported in this browser.';
+    return;
+  }
+  navigator.serviceWorker.register('./sw.js').then(reg=>{
+    if(statusEl) statusEl.textContent = 'Service worker: registered (' + (reg.active?'active':'pending') + ')';
+  }).catch(err=>{
+    if(statusEl) statusEl.textContent = 'Service worker: ' + err.message + '\n(sw.js must be in the same directory as this file)';
+  });
+  navigator.serviceWorker.ready.then(reg=>{
+    if(statusEl) statusEl.textContent = 'Service worker: active and ready';
+  });
+}
+
+function cacheAll(){
+  if(!('serviceWorker' in navigator)){ set('cache-out','Service workers not supported.'); return; }
+  navigator.serviceWorker.ready.then(reg=>{
+    reg.active.postMessage({ type:'CACHE_URLS', payload: SW_URLS });
+    set('cache-out', 'Caching ' + SW_URLS.length + ' resources...\n' + SW_URLS.join('\n'));
+    notify('Caching resources for offline use');
+  }).catch(e=>setE('cache-out','Error: '+e.message+'\n(sw.js must be alongside this file)'));
+}
+
+function clearCache(){
+  caches.keys().then(keys=>{
+    Promise.all(keys.map(k=>caches.delete(k))).then(()=>{
+      set('cache-out','All caches cleared.');
+      notify('Cache cleared');
+    });
+  }).catch(e=>setE('cache-out','Error: '+e.message));
+}
+
+function checkCache(){
+  caches.keys().then(keys=>{
+    if(!keys.length){ set('cache-out','No caches found. Click "Save Offline (You Will Be Able To Use This Site With No Internet)" first.'); return; }
+    Promise.all(keys.map(k=>caches.open(k).then(c=>c.keys().then(reqs=>reqs.map(r=>r.url))))).then(urlLists=>{
+      const all = urlLists.flat();
+      set('cache-out', 'Cache "'+keys.join('", "')+'":\n'+all.length+' item(s) cached\n\n'+all.join('\n'));
+    });
+  }).catch(e=>setE('cache-out','Error: '+e.message));
+}
+
+// ============================================================
+// TAYLOR SERIES
+// ============================================================
+function taylorSeries(){
+  const expr = document.getElementById('ts-fx').value.trim();
+  const a = parseFloat(document.getElementById('ts-a').value) || 0;
+  const N = Math.min(parseInt(document.getElementById('ts-n').value)||6, 12);
+  try{
+    const terms = [], lxTerms = [];
+    let fn = expr;
+    for(let n=0; n<=N; n++){
+      const val = math.evaluate(fn, {x:a, pi:Math.PI, e:Math.E});
+      const coeff = val / fact(n);
+      if(Math.abs(coeff) > 1e-14){
+        const cStr = Math.abs(coeff) > 1e10 ? coeff.toExponential(4) : coeff.toPrecision(5).replace(/\.?0+$/,'');
+        if(n===0){ lxTerms.push(cStr); }
+        else if(n===1){ lxTerms.push(`${Math.abs(coeff-1)<1e-12?'':cStr}(x${a?`-${a}`:''})`); }
+        else { lxTerms.push(`\\frac{${cStr}}{${n > 1 ? '' : '1'}}(x${a?`-${a}`:'`'})^{${n}}`); }
+        terms.push({n, coeff, val});
+      }
+      try{ fn = math.derivative(fn, 'x').toString(); }catch(e){ break; }
+    }
+    const poly = terms.map(({n,coeff})=>{
+      const c = coeff.toPrecision(6).replace(/\.?0+$/,'');
+      if(n===0) return c;
+      if(n===1) return `${c}·(x${a?`-${a}`:'`'})`;
+      return `${c}·(x${a?`-${a}`:'`'})^${n}`;
+    }).join(' + ');
+    const lx = terms.slice(0,6).map(({n,coeff})=>{
+      const c = numToLatex(coeff);
+      if(n===0) return c;
+      const xpart = a ? `(x-${a})` : 'x';
+      if(n===1) return `${c === '1' ? '' : c}${xpart}`;
+      return `${c === '1' ? '' : c}${xpart}^{${n}}`;
+    }).join(' + ') + (terms.length > 6 ? ' + \\cdots' : '');
+    setLatex('ts-out',[
+      {label:`T_{${N}}(x) around x=${a}`, latex:'T_N(x) = ' + lx, plain:'T_N(x) = '+poly},
+      {plain:`${terms.length} non-zero terms. Exact for polynomials; approximation for transcendentals.`}
+    ]);
+  }catch(e){ setE('ts-out','Error: '+e.message); }
+}
+
+function taylorPlot(){
+  const expr = document.getElementById('ts-fx').value.trim();
+  const a = parseFloat(document.getElementById('ts-a').value)||0;
+  const N = Math.min(parseInt(document.getElementById('ts-n').value)||6,12);
+  try{
+    const xs=[], yOrig=[], yApprox=[];
+    // Build coefficients first
+    const coeffs = [];
+    let fn = expr;
+    for(let n=0;n<=N;n++){
+      try{
+        const val = math.evaluate(fn,{x:a,pi:Math.PI,e:Math.E});
+        coeffs.push(val/fact(n));
+        fn = math.derivative(fn,'x').toString();
+      }catch(e){ coeffs.push(0); break; }
+    }
+    for(let xi=-5;xi<=5;xi+=0.1){
+      const x = a + xi;
+      xs.push(x.toFixed(2));
+      try{ yOrig.push(math.evaluate(expr,{x,pi:Math.PI,e:Math.E})); }
+      catch(e){ yOrig.push(null); }
+      let approx=0;
+      coeffs.forEach((c,n)=>{ approx += c * Math.pow(x-a, n); });
+      yApprox.push(Math.abs(approx)<1e8 ? approx : null);
+    }
+    document.getElementById('ts-graph').style.display='block';
+    dChart('ts-chart', xs, [
+      {label:'f(x)', data:yOrig, c:'#111', borderWidth:2},
+      {label:`T${N}(x)`, data:yApprox, c:'#888', borderWidth:1.5, dash:true}
+    ], `Taylor Approximation (a=${a}, N=${N})`);
+  }catch(e){ setE('ts-out','Plot error: '+e.message); }
+}
+
+// ============================================================
+// LIMITS
+// ============================================================
+function computeLimit(){
+  const f = document.getElementById('lim-f').value.trim();
+  const aStr = document.getElementById('lim-a').value.trim();
+  const side = document.getElementById('lim-side').value;
+  const a = aStr === 'Infinity' || aStr === 'inf' ? Infinity : aStr === '-Infinity' || aStr === '-inf' ? -Infinity : parseFloat(aStr);
+  const ev = x => { try{ return math.evaluate(f,{x,pi:Math.PI,e:Math.E}); }catch(e){ return NaN; } };
+  try{
+    const eps = [1e-3,1e-5,1e-7,1e-9];
+    const leftVals  = isFinite(a) ? eps.map(e=>ev(a-e)) : eps.map(e=>ev(-1/e));
+    const rightVals = isFinite(a) ? eps.map(e=>ev(a+e)) : eps.map(e=>ev(1/e));
+    const leftLim  = leftVals[leftVals.length-1];
+    const rightLim = rightVals[rightVals.length-1];
+    const rows = [{label:`lim  f(x)  as x → ${aStr}`}];
+    if(side==='both'||side==='left')
+      rows.push({latex:`\\lim_{x \\to ${aStr}^-} f(x) = ${numToLatex(leftLim)}`, plain:`Left limit: ${fmtN(leftLim)}`});
+    if(side==='both'||side==='right')
+      rows.push({latex:`\\lim_{x \\to ${aStr}^+} f(x) = ${numToLatex(rightLim)}`, plain:`Right limit: ${fmtN(rightLim)}`});
+    if(side==='both'){
+      const agree = Math.abs(leftLim-rightLim)<1e-5 && isFinite(leftLim) && isFinite(rightLim);
+      rows.push({plain: agree
+        ? `Limit exists: ${fmtN((leftLim+rightLim)/2)}`
+        : 'Limit does NOT exist (one-sided limits differ or diverge)'});
+    }
+    setLatex('lim-out', rows);
+  }catch(e){ setE('lim-out','Error: '+e.message); }
+}
+
+function lhopital(){
+  const g = document.getElementById('lhop-g').value.trim();
+  const h = document.getElementById('lhop-h').value.trim();
+  const a = parseFloat(document.getElementById('lhop-a').value);
+  try{
+    const gv = math.evaluate(g,{x:a,pi:Math.PI,e:Math.E});
+    const hv = math.evaluate(h,{x:a,pi:Math.PI,e:Math.E});
+    const isIndet = (Math.abs(gv)<1e-10&&Math.abs(hv)<1e-10)||(Math.abs(gv)>1e9&&Math.abs(hv)>1e9);
+    const form = Math.abs(gv)<1e-10&&Math.abs(hv)<1e-10 ? '0/0' : Math.abs(gv)>1e9&&Math.abs(hv)>1e9 ? '∞/∞' : 'not indeterminate';
+    const gp = math.derivative(g,'x').toString();
+    const hp = math.derivative(h,'x').toString();
+    const gpv = math.evaluate(gp,{x:a,pi:Math.PI,e:Math.E});
+    const hpv = math.evaluate(hp,{x:a,pi:Math.PI,e:Math.E});
+    const lim = gpv/hpv;
+    setLatex('lhop-out',[
+      {plain:`Form at x=${a}: ${form}`},
+      {label:"L'Hôpital: d/dx numerator / d/dx denominator",
+       latex:`\\lim_{x\\to${a}}\\frac{${toLatex(g)}}{${toLatex(h)}} = \\lim_{x\\to${a}}\\frac{${toLatex(gp)}}{${toLatex(hp)}} = ${numToLatex(lim)}`,
+       plain:`= ${fmtN(lim)}`}
+    ]);
+  }catch(e){ setE('lhop-out','Error: '+e.message); }
+}
+
+// ============================================================
+// SYMBOLIC CALCULUS
+// ============================================================
+function symIntegrate(){
+  const f = document.getElementById('si-fx').value.trim();
+  const v = document.getElementById('si-var').value.trim()||'x';
+  try{
+    // math.js can do symbolic integration for common functions via antiderivative
+    // We use a table-based approach + math.js simplify
+    const result = mathIntegrate(f, v);
+    setLatex('si-out',[
+      {label:'Antiderivative', latex:`\\int ${toLatex(f)}\\,d${v} = ${toLatex(result)} + C`, plain:`∫ ${f} d${v} = ${result} + C`}
+    ]);
+  }catch(e){ setE('si-out','Symbolic integration error: '+e.message+'\nTry a simpler expression or use the Integrals panel for numerical.'); }
+}
+
+function mathIntegrate(f, v){
+  // Use math.js derivative in reverse via antiderivative rules
+  // math.js doesn't have built-in symbolic integration, but we can handle
+  // many common patterns by expanding and integrating term by term
+  const node = math.parse(f);
+  return integrateNode(node, v).toString();
+}
+
+function integrateNode(node, v){
+  const ms = math;
+  // Try math.js simplification then pattern match
+  // Polynomial: x^n -> x^(n+1)/(n+1)
+  // We'll use a recursive approach on the parse tree
+  const type = node.type;
+  if(type === 'ConstantNode'){
+    return ms.parse(`${node.value}*${v}`);
+  }
+  if(type === 'SymbolNode'){
+    if(node.name === v) return ms.parse(`${v}^2/2`);
+    return ms.parse(`${node.name}*${v}`); // treat as constant
+  }
+  if(type === 'OperatorNode'){
+    const op = node.op;
+    if(op === '+' || op === '-'){
+      const args = node.args.map(a=>integrateNode(a,v));
+      return ms.parse(`(${args[0]}) ${op} (${args[1]})`);
+    }
+    if(op === '*'){
+      // Check if one side is constant wrt v
+      const [a, b] = node.args;
+      const aHasV = a.toString().includes(v);
+      const bHasV = b.toString().includes(v);
+      if(!aHasV) return ms.parse(`(${a}) * (${integrateNode(b,v)})`);
+      if(!bHasV) return ms.parse(`(${integrateNode(a,v)}) * (${b})`);
+    }
+    if(op === '^'){
+      const [base, exp] = node.args;
+      if(base.type==='SymbolNode' && base.name===v && exp.type==='ConstantNode'){
+        const n = parseFloat(exp.value);
+        if(n===-1) return ms.parse(`log(abs(${v}))`);
+        return ms.parse(`${v}^${n+1}/${n+1}`);
+      }
+    }
+  }
+  if(type === 'FunctionNode'){
+    const fn = node.fn.name || node.fn;
+    const arg = node.args[0];
+    const argStr = arg.toString();
+    // Check if arg is linear in v: a*v + b
+    const argHasV = argStr.includes(v);
+    if(argHasV){
+      // Differentiate arg to find chain rule factor
+      const argD = ms.derivative(argStr, v).toString();
+      const isLinear = !argD.includes(v); // constant derivative
+      if(isLinear){
+        const factor = `1/(${argD})`;
+        const antiderivs = {
+          'sin': `(-cos(${argStr}))*(${factor})`,
+          'cos': `(sin(${argStr}))*(${factor})`,
+          'tan': `(-log(abs(cos(${argStr}))))*(${factor})`,
+          'exp': `(exp(${argStr}))*(${factor})`,
+          'log': `((${argStr})*log(${argStr})-(${argStr}))*(${factor})`,
+          'ln':  `((${argStr})*log(${argStr})-(${argStr}))*(${factor})`,
+          'sqrt':`(2/3*(${argStr})^(3/2))*(${factor})`,
+        };
+        if(antiderivs[fn]){
+          return ms.simplify(antiderivs[fn]);
+        }
+      }
+    }
+  }
+  // Fallback: try to differentiate result candidates (can't easily reverse)
+  throw new Error(`Cannot symbolically integrate: ${node.toString()}. Use numerical integration.`);
+}
+
+function symIntegrateDefinite(){
+  const f = document.getElementById('si-fx').value.trim();
+  const v = document.getElementById('si-var').value.trim()||'x';
+  const a = parseFloat(document.getElementById('si-a').value);
+  const b = parseFloat(document.getElementById('si-b').value);
+  try{
+    // Numerical evaluation using Simpson's rule for definite
+    const fn = x => { try{ return math.evaluate(f,{[v]:x,pi:Math.PI,e:Math.E}); }catch(e){return 0;} };
+    const result = simp(fn, a, b, 1000);
+    // Also try symbolic
+    let symResult = '';
+    try{
+      const antideriv = mathIntegrate(f, v).toString();
+      const va = math.evaluate(antideriv, {[v]:b, pi:Math.PI, e:Math.E});
+      const vb = math.evaluate(antideriv, {[v]:a, pi:Math.PI, e:Math.E});
+      const exact = va - vb;
+      symResult = `\nSymbolic: [${antideriv}]_${a}^${b} = ${fmtN(exact)}`;
+    }catch(e){ symResult = '\n(Symbolic antiderivative not available — showing numerical only)'; }
+    setLatex('si-out',[
+      {label:'Definite Integral',
+       latex:`\\int_{${a}}^{${b}} ${toLatex(f)}\\,d${v} = ${numToLatex(result)}`,
+       plain:`∫[${a},${b}] ${f} d${v} = ${fmtN(result)}${symResult}`}
+    ]);
+  }catch(e){ setE('si-out','Error: '+e.message); }
+}
+
+function symSolve(){
+  let eq = document.getElementById('se-eq').value.trim();
+  const v = document.getElementById('se-var').value.trim()||'x';
+  try{
+    // Normalize: move everything to one side
+    if(eq.includes('=')){
+      const [lhs, rhs] = eq.split('=');
+      eq = `(${lhs.trim()}) - (${rhs.trim()})`;
+    }
+    // Try to get exact symbolic roots via polynomial
+    // First attempt: factor using math.js
+    let symRoots = null;
+    try{
+      const simplified = math.simplify(eq, {[v]:0}).toString();
+      // Try to collect polynomial coefficients
+      const node = math.parse(eq);
+      // Use rationalize / polynomial approach
+      const poly = math.rationalize(eq, {}, true);
+      if(poly && poly.coefficients){
+        const coeffs = poly.coefficients;
+        // For quadratic: ax²+bx+c=0
+        if(coeffs.length === 3){
+          const [c,b,a] = coeffs;
+          const disc = b*b - 4*a*c;
+          if(disc >= 0){
+            const r1 = (-b + Math.sqrt(disc))/(2*a);
+            const r2 = (-b - Math.sqrt(disc))/(2*a);
+            symRoots = [r1, r2];
+          } else {
+            symRoots = [
+              `${(-b/(2*a)).toPrecision(5)} + ${(Math.sqrt(-disc)/(2*a)).toPrecision(5)}i`,
+              `${(-b/(2*a)).toPrecision(5)} - ${(Math.sqrt(-disc)/(2*a)).toPrecision(5)}i`
+            ];
+          }
+        }
+      }
+    }catch(polyErr){}
+
+    // Always do numerical root finding
+    const roots = numRoots(eq, v);
+    const rows = [{label:`Solutions to ${document.getElementById('se-eq').value}`}];
+    if(symRoots && symRoots.length){
+      rows.push({plain:`Symbolic roots: ${symRoots.map((r,i)=>`${v}${i+1} = ${typeof r==='string'?r:fmtN(r)}`).join(',  ')}`});
+    }
+    if(roots.length===0){
+      rows.push({plain:'No real roots found in [-200, 200]'});
+    } else {
+      roots.forEach((r,i)=>{
+        rows.push({latex:`${v}_{${i+1}} = ${numToLatex(r)}`, plain:`${v}${i+1} = ${fmtN(r)}`});
+      });
+    }
+    setLatex('se-out', rows);
+  }catch(e){ setE('se-out','Error: '+e.message); }
+}
+
+function partialFrac(){
+  const num = document.getElementById('pf-num').value.trim();
+  const den = document.getElementById('pf-den').value.trim();
+  try{
+    const roots = numRoots(den);
+    if(!roots.length){ setE('pf-out','Could not find roots of denominator.'); return; }
+    const ev = (expr,x) => math.evaluate(expr,{x,pi:Math.PI,e:Math.E});
+    const residues = roots.map(r=>{
+      const h = 1e-7;
+      const numVal = ev(num, r);
+      const denDeriv = (ev(den,r+h)-ev(den,r-h))/(2*h);
+      return { root:r, A: numVal/denDeriv };
+    });
+    const rows = [{label:'Partial Fraction Decomposition'}];
+    rows.push({plain:`(${num}) / (${den})`});
+    const lxParts = residues.map(({root:r,A})=>{
+      const rs = r>=0 ? `-${numToLatex(r)}` : `+${numToLatex(-r)}`;
+      return `\\frac{${numToLatex(A)}}{x${rs}}`;
+    });
+    rows.push({latex: lxParts.join(' + '), plain: residues.map(({root:r,A})=>`${fmtN(A)}/(x-${fmtN(r)})`).join(' + ')});
+    rows.push({plain:'Note: assumes distinct real linear factors in denominator'});
+    setLatex('pf-out', rows);
+  }catch(e){ setE('pf-out','Error: '+e.message); }
+}
+
+function polyLongDiv(){
+  const numStr = document.getElementById('pd-num').value.trim();
+  const denStr = document.getElementById('pd-den').value.trim();
+  try{
+    // Get roots of divisor to do synthetic division
+    const denRoots = numRoots(denStr);
+    // Simple case: divisor is (x - r)
+    if(denRoots.length === 1){
+      const r = denRoots[0];
+      // Check it's approximately linear: evaluate at several points
+      const ev = (x) => math.evaluate(numStr,{x,pi:Math.PI,e:Math.E});
+      // Synthetic division
+      const quotPts = [];
+      const xs = [-3,-2,-1,0,1,2,3,4,5];
+      const ys = xs.map(x=>{
+        const den = math.evaluate(denStr,{x,pi:Math.PI,e:Math.E});
+        return Math.abs(den) > 1e-10 ? math.evaluate(numStr,{x,pi:Math.PI,e:Math.E})/den : NaN;
+      });
+      const remainder = ev(r);
+      setLatex('pd-out',[
+        {label:'Polynomial Division'},
+        {plain:`(${numStr}) ÷ (${denStr})`},
+        {plain:`Root of divisor: ${fmtN(r)}`},
+        {plain:`Remainder at x=${fmtN(r)}: f(${fmtN(r)}) = ${fmtN(remainder)}`},
+        {latex:`\\frac{p(x)}{d(x)} = q(x) + \\frac{R}{d(x)}`, plain:`= quotient + remainder/divisor`},
+        {plain:'Use the Symbolic panel → Simplify or factor the expression for exact symbolic result.'}
+      ]);
+    } else {
+      // General: show the simplified form
+      const simplified = math.simplify(`(${numStr})/(${denStr})`);
+      setLatex('pd-out',[
+        {label:'Simplified Form'},
+        {latex:`\\frac{${toLatex(numStr)}}{${toLatex(denStr)}} = ${toLatex(simplified.toString())}`,
+         plain:`= ${simplified.toString()}`}
+      ]);
+    }
+  }catch(e){ setE('pd-out','Error: '+e.message); }
+}
+
+// ============================================================
+// GRAM-SCHMIDT
+// ============================================================
+function dot(a,b){ return a.reduce((s,v,i)=>s+v*b[i],0); }
+function vecNorm(v){ return Math.sqrt(dot(v,v)); }
+
+function gramSchmidt(){
+  const lines = document.getElementById('gs-vecs').value.trim().split('\n').filter(l=>l.trim());
+  try{
+    const vecs = lines.map(l=>l.split(',').map(Number));
+    const n = vecs.length;
+    if(!n){ setE('gs-out','Enter at least one vector.'); return; }
+    const us = [], es = [];
+    for(let i=0;i<n;i++){
+      let u = [...vecs[i]];
+      for(let j=0;j<i;j++){
+        const proj = dot(vecs[i],us[j])/dot(us[j],us[j]);
+        u = u.map((v,k)=>v - proj*us[j][k]);
+      }
+      us.push(u);
+      const mag = vecNorm(u);
+      if(mag < 1e-12){ setE('gs-out',`Vector ${i+1} is linearly dependent on previous vectors.`); return; }
+      es.push(u.map(v=>v/mag));
+    }
+    const rows = [{label:`Orthonormal Basis (${n} vectors)`}];
+    es.forEach((e,i)=>{
+      const lx = `\\mathbf{e}_{${i+1}} = \\begin{pmatrix}${e.map(v=>numToLatex(v)).join('\\\\')}\\end{pmatrix}`;
+      rows.push({latex:lx, plain:`e${i+1} = [${e.map(v=>v.toFixed(6)).join(', ')}]`});
+    });
+    // Verify orthogonality
+    const pairs = [];
+    for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) pairs.push(`e${i+1}·e${j+1}=${dot(es[i],es[j]).toExponential(2)}`);
+    rows.push({plain:'Verification: '+pairs.join(', ')});
+    setLatex('gs-out', rows);
+  }catch(e){ setE('gs-out','Error: '+e.message); }
+}
+
+// ============================================================
+// SVD (singular values via AᵀA eigenvalues)
+// ============================================================
+function parseTextMatrix(id){
+  return document.getElementById(id).value.trim().split('\n').filter(l=>l.trim()).map(l=>l.split(',').map(Number));
+}
+
+function doSVD(){
+  try{
+    const M = parseTextMatrix('svd-m');
+    const Mt = M[0].map((_,i)=>M.map(r=>r[i])); // transpose
+    const MtM = Mt.map(row=>M[0].map((_,j)=>row.reduce((s,v,k)=>s+v*M[k][j],0)));
+    // Use math.js eigs
+    const eig = math.eigs(math.matrix(MtM));
+    const vals = eig.values.toArray ? eig.values.toArray() : Array.from(eig.values._data||eig.values);
+    const sigmas = vals.map(v=>Math.sqrt(Math.max(0,typeof v==='object'?v.re:v))).sort((a,b)=>b-a);
+    const rank = sigmas.filter(s=>s>1e-10).length;
+    const rows = [
+      {label:'Singular Values (σ)'},
+      ...sigmas.map((s,i)=>({latex:`\\sigma_{${i+1}} = ${numToLatex(s)}`, plain:`σ${i+1} = ${s.toPrecision(8)}`})),
+      {plain:`Rank = ${rank},  Condition number = ${rank>0?(sigmas[0]/sigmas[rank-1]).toPrecision(5):'N/A'}`}
+    ];
+    setLatex('svd-out', rows);
+  }catch(e){ setE('svd-out','Error: '+e.message); }
+}
+
+// ============================================================
+// CHOLESKY DECOMPOSITION
+// ============================================================
+function doCholesky(){
+  try{
+    const data = parseTextMatrix('chol-m');
+    const n = data.length;
+    const L = Array.from({length:n},()=>Array(n).fill(0));
+    for(let i=0;i<n;i++){
+      for(let j=0;j<=i;j++){
+        let sum = data[i][j];
+        for(let k=0;k<j;k++) sum -= L[i][k]*L[j][k];
+        if(i===j){
+          if(sum<0) throw new Error('Matrix is not positive-definite');
+          L[i][j] = Math.sqrt(sum);
+        } else { L[i][j] = sum/L[j][j]; }
+      }
+    }
+    // Verify: LLᵀ
+    const Lt = L[0].map((_,i)=>L.map(r=>r[i]));
+    const LLt = L.map(row=>Lt[0].map((_,j)=>row.reduce((s,v,k)=>s+v*Lt[k][j],0)));
+    set('chol-out', 'L =\n'+fmtMat(L)+'\n\nVerification A = LLᵀ:\n'+fmtMat(LLt));
+  }catch(e){ setE('chol-out','Error: '+e.message+'\n(Matrix must be symmetric positive-definite)'); }
+}
+
+// ============================================================
+// NULL / COLUMN SPACE
+// ============================================================
+function nullSpace(){
+  try{
+    const A = parseTextMatrix('ns-m');
+    const R = rref(A.map(r=>[...r]));
+    const m=R.length, nc=R[0].length;
+    const pivotCols = [];
+    for(let r=0;r<m;r++){
+      for(let c=0;c<nc;c++){
+        if(Math.abs(R[r][c])>1e-10){ pivotCols.push(c); break; }
+      }
+    }
+    const freeCols = [...Array(nc).keys()].filter(c=>!pivotCols.includes(c));
+    if(!freeCols.length){ set('ns-out','Null space = {0}  (trivial)\nNullity = 0, Rank = '+pivotCols.length); return; }
+    const nullVecs = freeCols.map(fc=>{
+      const v = Array(nc).fill(0); v[fc]=1;
+      pivotCols.forEach((pc,i)=>{ v[pc] = -(R[i] && R[i][fc] || 0); });
+      return v;
+    });
+    let out = `Null space basis  (nullity = ${freeCols.length}):\n`;
+    nullVecs.forEach((v,i)=>{ out+=`  n${i+1} = [${v.map(x=>x.toFixed(4)).join(', ')}]\n`; });
+    out += `\nRank = ${pivotCols.length}, Nullity = ${freeCols.length}\nRank-Nullity: ${pivotCols.length} + ${freeCols.length} = ${nc} = #columns`;
+    set('ns-out', out);
+  }catch(e){ setE('ns-out','Error: '+e.message); }
+}
+
+function colSpace(){
+  try{
+    const A = parseTextMatrix('ns-m');
+    const R = rref(A.map(r=>[...r]));
+    const pivotCols = [];
+    for(let r=0;r<R.length;r++){
+      for(let c=0;c<R[0].length;c++){
+        if(Math.abs(R[r][c])>1e-10){ pivotCols.push(c); break; }
+      }
+    }
+    const basis = pivotCols.map(c=>A.map(row=>row[c]));
+    let out = `Column space basis  (rank = ${pivotCols.length}):\n`;
+    basis.forEach((v,i)=>{ out+=`  c${i+1} = [${v.map(x=>x.toFixed(4)).join(', ')}]\n`; });
+    set('ns-out', out);
+  }catch(e){ setE('ns-out','Error: '+e.message); }
+}
+
+function rowSpace(){
+  try{
+    const A = parseTextMatrix('ns-m');
+    const R = rref(A.map(r=>[...r]));
+    const nonzeroRows = R.filter(row=>row.some(v=>Math.abs(v)>1e-10));
+    let out = `Row space basis  (${nonzeroRows.length} vector${nonzeroRows.length===1?'':'s'}):\n`;
+    nonzeroRows.forEach((v,i)=>{ out+=`  r${i+1} = [${v.map(x=>x.toFixed(4)).join(', ')}]\n`; });
+    set('ns-out', out);
+  }catch(e){ setE('ns-out','Error: '+e.message); }
+}
+
+// ============================================================
+// TRIANGLE SOLVER
+// ============================================================
+function solveTri(){
+  const gv = id => { const v=document.getElementById(id).value.trim(); return v===''?NaN:parseFloat(v); };
+  let a=gv('tri-a'), b=gv('tri-b'), c=gv('tri-c');
+  let A=gv('tri-A'), B=gv('tri-B'), C=gv('tri-C');
+  // Convert angles to radians
+  const d2r = v => isNaN(v)?v:v*Math.PI/180;
+  const r2d = v => isNaN(v)?v:v*180/Math.PI;
+  A=d2r(A); B=d2r(B); C=d2r(C);
+
+  const known = [!isNaN(a),!isNaN(b),!isNaN(c),!isNaN(A),!isNaN(B),!isNaN(C)].filter(Boolean).length;
+  if(known < 3){ setE('tri-out','Please provide at least 3 known values.'); return; }
+
+  try{
+    // Fill missing angles from angle sum
+    if(!isNaN(A)&&!isNaN(B)&&isNaN(C)) C=Math.PI-A-B;
+    if(!isNaN(A)&&!isNaN(C)&&isNaN(B)) B=Math.PI-A-C;
+    if(!isNaN(B)&&!isNaN(C)&&isNaN(A)) A=Math.PI-B-C;
+
+    // Law of sines to find sides
+    if(!isNaN(a)&&!isNaN(A)){
+      const R2=a/(2*Math.sin(A));
+      if(!isNaN(B)&&isNaN(b)) b=2*R2*Math.sin(B);
+      if(!isNaN(C)&&isNaN(c)) c=2*R2*Math.sin(C);
+      if(!isNaN(b)&&isNaN(B)) B=Math.asin(Math.min(1,b/(2*R2)));
+      if(!isNaN(c)&&isNaN(C)) C=Math.asin(Math.min(1,c/(2*R2)));
+    }
+    if(!isNaN(b)&&!isNaN(B)){
+      const R2=b/(2*Math.sin(B));
+      if(!isNaN(A)&&isNaN(a)) a=2*R2*Math.sin(A);
+      if(!isNaN(C)&&isNaN(c)) c=2*R2*Math.sin(C);
+    }
+    if(!isNaN(c)&&!isNaN(C)){
+      const R2=c/(2*Math.sin(C));
+      if(!isNaN(A)&&isNaN(a)) a=2*R2*Math.sin(A);
+      if(!isNaN(B)&&isNaN(b)) b=2*R2*Math.sin(B);
+    }
+
+    // Law of cosines SSS
+    if(!isNaN(a)&&!isNaN(b)&&!isNaN(c)){
+      if(isNaN(A)) A=Math.acos((b*b+c*c-a*a)/(2*b*c));
+      if(isNaN(B)) B=Math.acos((a*a+c*c-b*b)/(2*a*c));
+      if(isNaN(C)) C=Math.PI-A-B;
+    }
+    // SAS
+    if(!isNaN(a)&&!isNaN(b)&&!isNaN(C)&&isNaN(c)) c=Math.sqrt(a*a+b*b-2*a*b*Math.cos(C));
+    if(!isNaN(a)&&!isNaN(c)&&!isNaN(B)&&isNaN(b)) b=Math.sqrt(a*a+c*c-2*a*c*Math.cos(B));
+    if(!isNaN(b)&&!isNaN(c)&&!isNaN(A)&&isNaN(a)) a=Math.sqrt(b*b+c*c-2*b*c*Math.cos(A));
+
+    // Final fill
+    if(isNaN(C)&&!isNaN(A)&&!isNaN(B)) C=Math.PI-A-B;
+    if(isNaN(B)&&!isNaN(A)&&!isNaN(C)) B=Math.PI-A-C;
+    if(isNaN(A)&&!isNaN(B)&&!isNaN(C)) A=Math.PI-B-C;
+
+    const s=(a+b+c)/2;
+    const area=Math.sqrt(Math.max(0,s*(s-a)*(s-b)*(s-c)));
+    const R_circ = a/(2*Math.sin(A));
+    const r_in = area/s;
+    const peri = a+b+c;
+
+    const fmt8 = v => isNaN(v)?'?':v.toPrecision(8);
+    const fmtDeg = v => isNaN(v)?'?':(r2d(v)).toPrecision(8)+'°';
+
+    setLatex('tri-out',[
+      {label:'Sides'},
+      {plain:`a = ${fmt8(a)}   b = ${fmt8(b)}   c = ${fmt8(c)}`},
+      {label:'Angles'},
+      {plain:`A = ${fmtDeg(A)}   B = ${fmtDeg(B)}   C = ${fmtDeg(C)}`},
+      {label:'Properties'},
+      {latex:`\\text{Area} = ${numToLatex(area)}`, plain:`Area = ${fmt8(area)}`},
+      {plain:`Perimeter = ${fmt8(peri)}`},
+      {plain:`Inradius r = ${r_in.toPrecision(6)}   Circumradius R = ${R_circ.toPrecision(6)}`},
+      {plain:`Type: ${Math.abs(r2d(A)-90)<0.001||Math.abs(r2d(B)-90)<0.001||Math.abs(r2d(C)-90)<0.001?'Right':''}${a===b&&b===c?'Equilateral':a===b||b===c||a===c?'Isosceles':'Scalene'}`}
+    ]);
+  }catch(e){ setE('tri-out','Error: '+e.message); }
+}
+
+// ============================================================
+// CONIC SECTIONS
+// ============================================================
+function analyzeEllipse(){
+  const a=parseFloat(document.getElementById('el-a').value);
+  const b=parseFloat(document.getElementById('el-b').value);
+  if(isNaN(a)||isNaN(b)||a<=0||b<=0){ setE('el-out','a and b must be positive.'); return; }
+  const [maj,min] = a>=b?[a,b]:[b,a];
+  const c=Math.sqrt(maj*maj-min*min);
+  const e=c/maj;
+  const area=Math.PI*a*b;
+  // Ramanujan approximation for perimeter
+  const h=(maj-min)**2/(maj+min)**2;
+  const perim=Math.PI*(maj+min)*(1+3*h/(10+Math.sqrt(4-3*h)));
+  setLatex('el-out',[
+    {label:'Ellipse',latex:`\\frac{x^2}{${a}^2}+\\frac{y^2}{${b}^2}=1`,plain:`x²/${a*a}+y²/${b*b}=1`},
+    {plain:`Semi-major a=${maj},  Semi-minor b=${min}`},
+    {plain:`Foci: (±${c.toPrecision(5)}, 0)   c=${c.toPrecision(5)}`},
+    {latex:`e = \\frac{c}{a} = ${numToLatex(e)}`,plain:`Eccentricity e = ${e.toPrecision(6)}`},
+    {latex:`A = \\pi ab = ${numToLatex(area)}`,plain:`Area = ${area.toPrecision(8)}`},
+    {plain:`Perimeter ≈ ${perim.toPrecision(8)} (Ramanujan approximation)`},
+    {plain:`Latus rectum = ${(2*min*min/maj).toPrecision(5)}`}
+  ]);
+}
+
+function analyzeHyperbola(){
+  const a=parseFloat(document.getElementById('hy-a').value);
+  const b=parseFloat(document.getElementById('hy-b').value);
+  if(isNaN(a)||isNaN(b)||a<=0||b<=0){ setE('hy-out','a and b must be positive.'); return; }
+  const c=Math.sqrt(a*a+b*b);
+  const e=c/a;
+  setLatex('hy-out',[
+    {label:'Hyperbola',latex:`\\frac{x^2}{${a}^2}-\\frac{y^2}{${b}^2}=1`,plain:`x²/${a*a}-y²/${b*b}=1`},
+    {plain:`Foci: (±${c.toPrecision(5)}, 0)   c=${c.toPrecision(5)}`},
+    {latex:`e = ${numToLatex(e)}`,plain:`Eccentricity e = ${e.toPrecision(6)} (always > 1)`},
+    {plain:`Asymptotes: y = ±${(b/a).toPrecision(4)}x   (y = ±(b/a)x)`},
+    {plain:`Vertices: (±${a}, 0)`},
+    {plain:`Latus rectum = ${(2*b*b/a).toPrecision(5)}`}
+  ]);
+}
+
+function analyzeParabola(){
+  const a=parseFloat(document.getElementById('pa-a').value);
+  const b=parseFloat(document.getElementById('pa-b').value);
+  const c=parseFloat(document.getElementById('pa-c').value);
+  if(isNaN(a)||a===0){ setE('pa-out','a must be non-zero.'); return; }
+  const vx=-b/(2*a), vy=c-b*b/(4*a);
+  const p=1/(4*a);   // focal length
+  const focusX=vx, focusY=vy+p;
+  const directrixY=vy-p;
+  const disc=b*b-4*a*c;
+  setLatex('pa-out',[
+    {label:'Parabola',latex:`y=${a}x^2${b>=0?'+':''}${b}x${c>=0?'+':''}${c}`,plain:`y=${a}x²+${b}x+${c}`},
+    {latex:`\\text{Vertex: }(${numToLatex(vx)},\\,${numToLatex(vy)})`,plain:`Vertex: (${vx.toPrecision(5)}, ${vy.toPrecision(5)})`},
+    {plain:`Focus: (${focusX.toPrecision(5)}, ${focusY.toPrecision(5)})`},
+    {plain:`Directrix: y = ${directrixY.toPrecision(5)}`},
+    {plain:`p (focal length) = ${p.toPrecision(5)}`},
+    {plain:`Opens: ${a>0?'upward':'downward'}`},
+    {plain:`Discriminant: ${disc.toPrecision(5)}  →  ${disc>0?'2 real x-intercepts':disc===0?'1 x-intercept':'no real x-intercepts'}`}
+  ]);
+}
+
+// ============================================================
+// 3D GEOMETRY
+// ============================================================
+function planeFromPts(){
+  const parse3 = id => document.getElementById(id).value.split(',').map(Number);
+  const p1=parse3('pl-p1'), p2=parse3('pl-p2'), p3=parse3('pl-p3');
+  const v1=p2.map((v,i)=>v-p1[i]), v2=p3.map((v,i)=>v-p1[i]);
+  const n=[
+    v1[1]*v2[2]-v1[2]*v2[1],
+    v1[2]*v2[0]-v1[0]*v2[2],
+    v1[0]*v2[1]-v1[1]*v2[0]
+  ];
+  const d=n[0]*p1[0]+n[1]*p1[1]+n[2]*p1[2];
+  const mag=Math.sqrt(n.reduce((s,v)=>s+v*v,0));
+  setLatex('pl-out',[
+    {label:'Normal Vector',latex:`\\mathbf{n} = \\begin{pmatrix}${n.map(numToLatex).join('\\\\')}\\end{pmatrix}`,plain:`n = [${n.join(', ')}]`},
+    {latex:`${n[0]}x ${n[1]>=0?'+':''}${n[1]}y ${n[2]>=0?'+':''}${n[2]}z = ${d}`,plain:`Plane: ${n[0]}x + ${n[1]}y + ${n[2]}z = ${d}`},
+    {plain:`Unit normal: [${n.map(v=>(v/mag).toPrecision(4)).join(', ')}]`},
+    {plain:`Distance from origin: ${Math.abs(d/mag).toPrecision(6)}`}
+  ]);
+}
+
+function distToPlane(){
+  const pt=document.getElementById('d2p-pt').value.split(',').map(Number);
+  const pl=document.getElementById('d2p-pl').value.split(',').map(Number);
+  const [a,b,c,d]=pl;
+  const num=Math.abs(a*pt[0]+b*pt[1]+c*pt[2]-d);
+  const den=Math.sqrt(a*a+b*b+c*c);
+  const dist=num/den;
+  // Foot of perpendicular
+  const t=(d-a*pt[0]-b*pt[1]-c*pt[2])/(a*a+b*b+c*c);
+  const foot=[pt[0]+t*a,pt[1]+t*b,pt[2]+t*c];
+  setLatex('d2p-out',[
+    {label:'Distance Point to Plane',
+     latex:`d = \\frac{|ax_0+by_0+cz_0-d|}{\\sqrt{a^2+b^2+c^2}} = ${numToLatex(dist)}`,
+     plain:`Distance = ${dist.toPrecision(8)}`},
+    {plain:`Foot of perpendicular: (${foot.map(v=>v.toPrecision(5)).join(', ')})`}
+  ]);
+}
+
+function solid3D(){
+  const type=document.getElementById('sol-type').value;
+  const p1=parseFloat(document.getElementById('sol-p1').value);
+  const p2=parseFloat(document.getElementById('sol-p2').value);
+  const p3=parseFloat(document.getElementById('sol-p3').value);
+  const pi=Math.PI;
+  let rows=[];
+  if(type==='sphere'){
+    const V=4/3*pi*p1**3, SA=4*pi*p1**2;
+    rows=[{label:`Sphere  r = ${p1}`},
+      {latex:`V=\\frac{4}{3}\\pi r^3=${numToLatex(V)}`,plain:`Volume = ${V.toPrecision(8)}`},
+      {latex:`SA=4\\pi r^2=${numToLatex(SA)}`,plain:`Surface area = ${SA.toPrecision(8)}`},
+      {plain:`Great circle area = ${(pi*p1*p1).toPrecision(6)}`}];
+  } else if(type==='cylinder'){
+    const V=pi*p1**2*p2, SA=2*pi*p1*(p1+p2);
+    rows=[{label:`Cylinder  r=${p1},  h=${p2}`},
+      {plain:`Volume = ${V.toPrecision(8)}`},{plain:`Surface area = ${SA.toPrecision(8)}`},
+      {plain:`Lateral area = ${(2*pi*p1*p2).toPrecision(6)}`}];
+  } else if(type==='cone'){
+    const l=Math.sqrt(p1**2+p2**2), V=pi/3*p1**2*p2, SA=pi*p1*(p1+l);
+    rows=[{label:`Cone  r=${p1},  h=${p2}`},
+      {plain:`Volume = ${V.toPrecision(8)}`},{plain:`Surface area = ${SA.toPrecision(8)}`},
+      {plain:`Slant height l = ${l.toPrecision(6)}`}];
+  } else if(type==='torus'){
+    const V=2*pi**2*p1*p2**2, SA=4*pi**2*p1*p2;
+    rows=[{label:`Torus  R=${p1},  r=${p2}`},
+      {plain:`Volume = ${V.toPrecision(8)}`},{plain:`Surface area = ${SA.toPrecision(8)}`}];
+  } else if(type==='cube'){
+    const V=p1**3, SA=6*p1**2;
+    rows=[{label:`Cube  a=${p1}`},
+      {plain:`Volume = ${V.toPrecision(8)}`},{plain:`Surface area = ${SA.toPrecision(8)}`},
+      {plain:`Space diagonal = ${(p1*Math.sqrt(3)).toPrecision(6)}`}];
+  } else if(type==='box'){
+    const V=p1*p2*p3, SA=2*(p1*p2+p2*p3+p1*p3);
+    rows=[{label:`Box  l=${p1},  w=${p2},  h=${p3}`},
+      {plain:`Volume = ${V.toPrecision(8)}`},{plain:`Surface area = ${SA.toPrecision(8)}`},
+      {plain:`Space diagonal = ${Math.sqrt(p1**2+p2**2+p3**2).toPrecision(6)}`}];
+  } else if(type==='tetrahedron'){
+    const V=p1**3/(6*Math.sqrt(2)), SA=Math.sqrt(3)*p1**2;
+    rows=[{label:`Regular Tetrahedron  a=${p1}`},
+      {plain:`Volume = ${V.toPrecision(8)}`},{plain:`Surface area = ${SA.toPrecision(8)}`},
+      {plain:`Height = ${(p1*Math.sqrt(2/3)).toPrecision(6)}`}];
+  }
+  setLatex('sol-out', rows);
+}
+
+// ============================================================
+// GRAPH THEORY
+// ============================================================
+function getAdjMatrix(){
+  return document.getElementById('gt-adj').value.trim().split('\n').filter(l=>l.trim()).map(r=>r.split(',').map(Number));
+}
+function getLabels(){
+  const s=document.getElementById('gt-labels').value.trim();
+  return s ? s.split(',').map(x=>x.trim()) : null;
+}
+
+function gtBFS(){
+  const adj=getAdjMatrix(), labels=getLabels(), n=adj.length;
+  const start=Math.max(0,Math.min(n-1,parseInt(document.getElementById('gt-start').value)||0));
+  const visited=Array(n).fill(false), order=[], queue=[start]; visited[start]=true;
+  while(queue.length){
+    const v=queue.shift(); order.push(v);
+    for(let u=0;u<n;u++) if(adj[v][u] && !visited[u]){ visited[u]=true; queue.push(u); }
+  }
+  const L=i=>labels?labels[i]:String(i);
+  set('gt-out',`BFS traversal from node ${L(start)}:\n${order.map(L).join(' → ')}\n\nVisited: ${order.length} / ${n} nodes`+
+    (order.length<n?`\nUnreachable: ${[...Array(n).keys()].filter(i=>!visited[i]).map(L).join(', ')}`:''));
+}
+
+function gtDFS(){
+  const adj=getAdjMatrix(), labels=getLabels(), n=adj.length;
+  const start=Math.max(0,Math.min(n-1,parseInt(document.getElementById('gt-start').value)||0));
+  const visited=Array(n).fill(false), order=[];
+  const dfs=v=>{ visited[v]=true; order.push(v); for(let u=0;u<n;u++) if(adj[v][u]&&!visited[u]) dfs(u); };
+  dfs(start);
+  const L=i=>labels?labels[i]:String(i);
+  set('gt-out',`DFS traversal from node ${L(start)}:\n${order.map(L).join(' → ')}\n\nVisited: ${order.length} / ${n} nodes`);
+}
+
+function gtDijkstra(){
+  const adj=getAdjMatrix(), labels=getLabels(), n=adj.length;
+  const start=Math.max(0,Math.min(n-1,parseInt(document.getElementById('gt-start').value)||0));
+  const dist=Array(n).fill(Infinity), prev=Array(n).fill(-1), vis=Array(n).fill(false);
+  dist[start]=0;
+  for(let i=0;i<n;i++){
+    let u=-1;
+    for(let v=0;v<n;v++) if(!vis[v]&&(u===-1||dist[v]<dist[u])) u=v;
+    if(dist[u]===Infinity) break;
+    vis[u]=true;
+    for(let v=0;v<n;v++){
+      const w=adj[u][v];
+      if(w && dist[u]+w<dist[v]){ dist[v]=dist[u]+w; prev[v]=u; }
+    }
+  }
+  const L=i=>labels?labels[i]:String(i);
+  const pathTo=v=>{ const p=[]; let cur=v; while(cur!==-1){p.unshift(cur);cur=prev[cur];} return p.map(L).join('→'); };
+  let out=`Shortest paths from ${L(start)}:\n\n`;
+  dist.forEach((d,i)=>{ out+=`  to ${L(i).padEnd(5)}: ${d===Infinity?'∞':String(d).padEnd(8)} path: ${pathTo(i)}\n`; });
+  set('gt-out', out);
+}
+
+function gtCycle(){
+  const adj=getAdjMatrix(), n=adj.length;
+  const color=Array(n).fill(0); let cycle=false, cycleEdge=[];
+  const dfs=u=>{ color[u]=1; for(let v=0;v<n;v++){ if(!adj[u][v])continue; if(color[v]===1){cycle=true;cycleEdge=[u,v];return;} if(!color[v])dfs(v); } color[u]=2; };
+  for(let i=0;i<n;i++) if(!color[i]) dfs(i);
+  const labels=getLabels(), L=i=>labels?labels[i]:String(i);
+  set('gt-out', cycle
+    ? `Cycle DETECTED\nBack edge found: ${L(cycleEdge[0])} → ${L(cycleEdge[1])}\nGraph is NOT a DAG`
+    : 'No cycle detected\nGraph is a DAG (Directed Acyclic Graph) or Forest');
+}
+
+function gtDraw(){
+  const adj=getAdjMatrix(), labels=getLabels(), n=adj.length;
+  const cv=document.getElementById('gt-canvas'); cv.style.display='block';
+  const ctx=cv.getContext('2d'), W=cv.width, H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  const r=Math.min(W,H)*0.36;
+  const pos=Array.from({length:n},(_,i)=>{
+    const angle=2*Math.PI*i/n - Math.PI/2;
+    return [W/2+r*Math.cos(angle), H/2+r*Math.sin(angle)];
+  });
+  // Draw edges
+  ctx.strokeStyle='#ccc'; ctx.lineWidth=1.5;
+  for(let i=0;i<n;i++) for(let j=0;j<n;j++){
+    if(adj[i][j]){
+      ctx.beginPath(); ctx.moveTo(pos[i][0],pos[i][1]); ctx.lineTo(pos[j][0],pos[j][1]); ctx.stroke();
+      // Arrow tip for directed
+      const dx=pos[j][0]-pos[i][0], dy=pos[j][1]-pos[i][1];
+      const len=Math.sqrt(dx*dx+dy*dy);
+      if(len>0){
+        const nx=dx/len, ny=dy/len;
+        const mx=pos[j][0]-nx*18, my=pos[j][1]-ny*18;
+        ctx.beginPath();
+        ctx.moveTo(mx-ny*5,my+nx*5); ctx.lineTo(pos[j][0]-nx*18,pos[j][1]-ny*18); ctx.lineTo(mx+ny*5,my-nx*5);
+        ctx.fillStyle='#ccc'; ctx.fill();
+      }
+    }
+  }
+  // Draw nodes
+  pos.forEach(([x,y],i)=>{
+    ctx.beginPath(); ctx.arc(x,y,18,0,2*Math.PI);
+    ctx.fillStyle='#fff'; ctx.fill();
+    ctx.strokeStyle='#111'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.fillStyle='#111'; ctx.font='bold 11px Inter,sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(labels?labels[i]:String(i),x,y);
+  });
+  set('gt-out','Graph visualized — '+n+' nodes. BFS/DFS/Dijkstra results appear here after running.');
+}
+
 (function init(){
   buildMat();uOpts();fillConsts();ud();initCurrency();
   const t=new Date().toISOString().split('T')[0];['d1','d2','d-add'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=t;});
@@ -2652,51 +4224,22 @@ function notify(msg){
     if(e.target.id==='prec-e'&&e.key==='Enter')hiPrec();
     if(e.target.id==='poly-e'&&e.key==='Enter')polyRoots();
   });
+  // Restore persistent history from localStorage
+  loadHistFromStorage();
+  // Register service worker for offline caching
+  initSW();
+  // Restore state from URL hash (share feature)
+  restoreFromURL();
+  // Add keyboard shortcuts for new panels
+  document.addEventListener('keydown', e=>{
+    if(e.target.id==='ts-fx'&&e.key==='Enter') taylorSeries();
+    if(e.target.id==='lim-f'&&e.key==='Enter') computeLimit();
+    if(e.target.id==='si-fx'&&e.key==='Enter') symIntegrate();
+    if(e.target.id==='se-eq'&&e.key==='Enter') symSolve();
+  });
   notify('Calculator 2 ready.');
 })();
-async function cacheCurrentSite() {
-  const btn = document.getElementById('offline-btn');
-  const label = btn.querySelector('span');
 
-  if (!('serviceWorker' in navigator)) {
-    alert("Offline mode is not supported by this browser.");
-    return;
-  }
-
-  label.textContent = 'Syncing...';
-
-  // Automatically grab all current library URLs from your head
-  const scripts = Array.from(document.querySelectorAll('script[src]')).map(s => s.src);
-  const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
-  const assets = [window.location.href, ...scripts, ...styles];
-
-  try {
-    const reg = await navigator.serviceWorker.register('sw.js');
-    
-    // Send the list of assets to the worker to cache them
-    if (reg.active) {
-      reg.active.postMessage({
-        type: 'CACHE_URLS',
-        payload: assets
-      });
-    } else {
-      // If the worker is still installing, wait for it
-      reg.installing.addEventListener('statechange', (e) => {
-        if (e.target.state === 'activated') {
-          reg.active.postMessage({ type: 'CACHE_URLS', payload: assets });
-        }
-      });
-    }
-
-    btn.style.color = '#2ecc71';
-    label.textContent = 'Ready Offline';
-    if (typeof notify === 'function') notify('Calculator saved for offline use!');
-  } catch (err) {
-    label.textContent = 'Save Offline';
-    console.error('Registration failed:', err);
-    alert('Failed to register sw.js. Ensure the file exists in your folder.');
-  }
-}
 </script>
 </body>
 </html>
