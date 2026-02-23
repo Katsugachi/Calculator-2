@@ -9,6 +9,7 @@ One Of The Most Powerful Open Source Contained Calculators As Of 2026
 > Download Through Code > Download ZIP <br>
 > Extract All<br>
 > Open `index.html` and it should open right in your browser<br>
+P.S : The sw.js file is for offline usage and caches files, it does not affect any calculator functionality and nothing will happen if you delete it.
 # Repository Details
 ## Details 
 ![GitHub Repo Size](https://img.shields.io/github/repo-size/Katsugachi/Calculator-2) <br>
