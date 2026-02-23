@@ -2657,62 +2657,44 @@ function notify(msg){
 async function cacheCurrentSite() {
   const btn = document.getElementById('offline-btn');
   const label = btn.querySelector('span');
-  
+
   if (!('serviceWorker' in navigator)) {
-    alert("Service Workers are not supported in this browser or context (requires HTTPS or Localhost).");
+    alert("Offline mode is not supported by this browser.");
     return;
   }
 
   label.textContent = 'Syncing...';
 
-  // Automatically grab all current library URLs from your <head>
+  // Automatically grab all current library URLs from your head
   const scripts = Array.from(document.querySelectorAll('script[src]')).map(s => s.src);
   const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href);
   const assets = [window.location.href, ...scripts, ...styles];
 
-  const swCode = `
-    const CACHE_NAME = 'calc-offline-v2';
-    const ASSETS = ${JSON.stringify(assets)};
-
-    self.addEventListener('install', (event) => {
-      self.skipWaiting();
-      event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-      );
-    });
-
-    self.addEventListener('activate', (event) => {
-      event.waitUntil(clients.claim());
-    });
-
-    self.addEventListener('fetch', (event) => {
-      event.respondWith(
-        caches.match(event.request).then((response) => response || fetch(event.request))
-      );
-    });
-  `;
-
   try {
-    const blob = new Blob([swCode], { type: 'text/javascript' });
-    const workerUrl = URL.createObjectURL(blob);
+    const reg = await navigator.serviceWorker.register('sw.js');
     
-    // Unregister existing workers first to avoid conflicts
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    for(let reg of registrations) await reg.unregister();
+    // Send the list of assets to the worker to cache them
+    if (reg.active) {
+      reg.active.postMessage({
+        type: 'CACHE_URLS',
+        payload: assets
+      });
+    } else {
+      // If the worker is still installing, wait for it
+      reg.installing.addEventListener('statechange', (e) => {
+        if (e.target.state === 'activated') {
+          reg.active.postMessage({ type: 'CACHE_URLS', payload: assets });
+        }
+      });
+    }
 
-    await navigator.serviceWorker.register(workerUrl);
-    
     btn.style.color = '#2ecc71';
     label.textContent = 'Ready Offline';
-    
-    // Built-in notification call from your file
     if (typeof notify === 'function') notify('Calculator saved for offline use!');
-    else alert('Calculator saved for offline use!');
-    
   } catch (err) {
     label.textContent = 'Save Offline';
-    console.error('Offline Error:', err);
-    alert('Critical Error: ' + err.name + " - " + err.message);
+    console.error('Registration failed:', err);
+    alert('Failed to register sw.js. Ensure the file exists in your folder.');
   }
 }
 </script>
