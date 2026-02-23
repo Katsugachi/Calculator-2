@@ -1,5 +1,4 @@
-# Calculator-2
-##### aka C2KA
+# Calculator-2 / KC2
 The Swiss Army Knife Of All Calculators <br>
 Newest Calculator Major Update Since 1961's ANITA MK-8 <br>
 One Of The Most Powerful Open Source Contained Calculators As Of 2026<br>
