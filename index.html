@@ -2834,14 +2834,17 @@ function rootsUnity(){
 // HIGH PRECISION
 // ============================================================
 function hiPrec(){
-  const d=Math.min(parseInt(document.getElementById('prec-d').value)||64,512);
+  const d=Math.max(2,Math.min(parseInt(document.getElementById('prec-d').value)||64,512));
   const e=document.getElementById('prec-e').value;
+  const prevCfg=math.config();
   try{
-    math.config({precision:d});
+    math.config({number:'BigNumber',precision:d});
     const r=math.evaluate(e);
     set('prec-out',`${d}-digit precision:\n${math.format(r,{precision:d})}`);
-    math.config({precision:64});
   }catch(err){setE('prec-out','Error: '+err.message);}
+  finally{
+    math.config({number:prevCfg.number,precision:prevCfg.precision});
+  }
 }
 
 function bigint(op){
