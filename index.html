@@ -3588,9 +3588,9 @@ async function loadPareto(){
     });
     paretoState.pipeline = generator;
     paretoState.TextStreamer = TextStreamer;
-    setParetoStatus('ready', 'Ready (' + (hasWebGPU ? 'WebGPU' : 'CPU') + ') — cached for offline use');
+    setParetoStatus('ready', 'Ready (' + (hasWebGPU ? 'WebGPU' : 'CPU') + ')');
     if(loadBtn){ loadBtn.textContent = 'Reload Model'; loadBtn.disabled = false; }
-    notify('Pareto is ready and cached for offline use');
+    notify('Pareto is ready');
   }catch(err){
     setParetoStatus('error', 'Failed to load: ' + err.message);
     if(loadBtn){ loadBtn.disabled = false; loadBtn.textContent = 'Load Pareto'; }
