@@ -2,7 +2,8 @@
 Swiss Army Knife Calculator <br>
 Newest Calculator Major Update Since 1961's ANITA MK-8 <br>
 One Of The Most Powerful Open Source Unitized Calculators As Of 2026 <br>
-> Courtesy To Claude Sonnet 4.6
+> Courtesy To Claude Sonnet 4.6 <br>
+Added Pareto - Math Assistant in the browser.
 # Web Version
 [![Launch](https://img.shields.io/badge/Launch-Calculator%202-blue?style=for-the-badge)](https://katsugachi.github.io/Calculator-2/) <br>
 Make sure to hit save offline to ensure the site works even with no internet
@@ -69,3 +70,5 @@ P.S : The sw.js file is for offline usage and caches files, it does not affect a
 > Features for date and time-based math.
 #### Applied Models
 > Pre-configured models for specialized scientific tasks, such as Newton’s Law of Cooling and Population Growth modeling.
+### Pareto: Local Math Assistant
+> Powered by LFM2, Calculator 2 now has Pareto implemented, an assistant that can help with tricky math problems.
