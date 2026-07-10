@@ -113,10 +113,12 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 .graph-func-row{display:flex;gap:7px;margin-bottom:4px;align-items:center}
 
 /* PARETO — AI math assistant chat UI */
-.pareto-wrap{display:flex;flex-direction:column;flex:1;min-height:0;height:100%;width:100%;max-width:720px;margin:0 auto;overflow:hidden}
-.pareto-topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #ebebeb;flex-shrink:0;flex-wrap:wrap}
-.pareto-status{display:flex;align-items:center;gap:6px;font-size:11px;color:#888;flex:1;min-width:120px}
-.pareto-dot{width:6px;height:6px;border-radius:50%;background:#ccc;display:inline-block;flex-shrink:0;transition:background 0.2s}
+.pareto-wrap{display:flex;flex-direction:column;flex:1;min-height:0;height:100%;width:100%;max-width:920px;margin:0 auto;overflow:hidden}
+#panel-pareto .panel-header{padding:14px 18px;font-size:15px;gap:9px}
+.pareto-topbar{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid #ebebeb;flex-shrink:0;flex-wrap:wrap}
+.pareto-topbar .badge{font-size:10px;padding:4px 10px}
+.pareto-status{display:flex;align-items:center;gap:8px;font-size:13px;color:#777;flex:1;min-width:160px}
+.pareto-dot{width:8px;height:8px;border-radius:50%;background:#ccc;display:inline-block;flex-shrink:0;transition:background 0.2s}
 .pareto-dot.loading{background:#e6a817;animation:paretoPulse 1s ease-in-out infinite}
 .pareto-dot.ready{background:#2ecc71}
 .pareto-dot.error{background:#c0392b}
@@ -157,11 +159,11 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 .pareto-typing-dot{width:5px;height:5px;border-radius:50%;background:#bbb;animation:paretoTyping 1.2s infinite}
 .pareto-typing-dot:nth-child(2){animation-delay:0.2s}.pareto-typing-dot:nth-child(3){animation-delay:0.4s}
 @keyframes paretoTyping{0%,60%,100%{opacity:0.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
-.pareto-inputbar{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #ebebeb;flex-shrink:0;align-items:flex-end;background:#fff}
-.pareto-input{flex:1;background:#fafafa;border:1px solid #e8e8e8;border-radius:10px;color:#111;font-family:'Inter',sans-serif;font-size:12.5px;padding:9px 12px;outline:none;resize:none;max-height:120px;line-height:1.5;transition:border-color 0.12s}
+.pareto-inputbar{display:flex;gap:10px;padding:16px 20px;border-top:1px solid #ebebeb;flex-shrink:0;align-items:flex-end;background:#fff}
+.pareto-input{flex:1;background:#fafafa;border:1px solid #e8e8e8;border-radius:12px;color:#111;font-family:'Inter',sans-serif;font-size:14px;padding:12px 14px;outline:none;resize:none;min-height:52px;max-height:180px;line-height:1.6;transition:border-color 0.12s}
 .pareto-input:focus{border-color:#111;background:#fff}
 .pareto-input::placeholder{color:#c8c8c8}
-.pareto-send{align-self:flex-end}
+.pareto-send{align-self:flex-end;font-size:13px;padding:11px 16px;border-radius:10px}
 .pareto-send:disabled{opacity:0.4;cursor:default}
 
 /* RESPONSIVE — collapse sidebar on narrow screens */
