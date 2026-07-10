@@ -134,7 +134,19 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 .pareto-msg-label{font-size:9px;color:#ccc;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;padding:0 3px;font-weight:500}
 .pareto-bubble{padding:9px 13px;border-radius:14px;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
 .pareto-msg-row.user .pareto-bubble{background:#111;color:#fff;border-bottom-right-radius:4px}
-.pareto-msg-row.assistant .pareto-bubble{background:#f2f2f2;color:#111;border:1px solid #ebebeb;border-bottom-left-radius:4px}
+.pareto-msg-row.assistant .pareto-bubble{background:#f2f2f2;color:#111;border:1px solid #ebebeb;border-bottom-left-radius:4px;white-space:normal}
+.pareto-think{margin-bottom:8px;border:1px solid #e2e2e2;border-radius:8px;background:#fff;overflow:hidden}
+.pareto-think summary{cursor:pointer;font-size:9.5px;color:#999;text-transform:uppercase;letter-spacing:0.6px;padding:6px 10px;user-select:none;list-style:none;display:flex;align-items:center;gap:5px}
+.pareto-think summary::-webkit-details-marker{display:none}
+.pareto-think summary::before{content:'▸';font-size:8px;transition:transform 0.15s;display:inline-block}
+.pareto-think[open] summary::before{transform:rotate(90deg)}
+.pareto-think-body{padding:2px 10px 10px;font-size:11px;color:#999;line-height:1.6;border-top:1px solid #f0f0f0}
+.pareto-answer{font-size:12.5px;line-height:1.65;color:#111}
+.pareto-answer strong{font-weight:600}
+.pareto-answer em{font-style:italic}
+.pareto-answer code{background:#e6e6e6;padding:1px 4px;border-radius:3px;font-size:11px;font-family:monospace}
+.pareto-answer .katex-display{margin:6px 0;overflow-x:auto;overflow-y:hidden}
+.pareto-answer .katex{font-size:1.05em}
 .pareto-bubble.typing{display:flex;gap:4px;align-items:center;padding:12px 14px}
 .pareto-typing-dot{width:5px;height:5px;border-radius:50%;background:#bbb;animation:paretoTyping 1.2s infinite}
 .pareto-typing-dot:nth-child(2){animation-delay:0.2s}.pareto-typing-dot:nth-child(3){animation-delay:0.4s}
@@ -241,7 +253,7 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
   </div>
   <div class="nav-section">
     <div class="nav-label">Assistance</div>
-    <div class="nav-item" onclick="nav('pareto',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg> <span>Pareto</span></div>
+    <div class="nav-item" onclick="nav('pareto',this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,1 17,12 12,23 7,12"/></svg> <span>Pareto</span></div>
   </div>
 </div>
 <div class="main">
@@ -1547,7 +1559,7 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
 
 <!-- PARETO — AI MATH ASSISTANT -->
 <div class="panel" id="panel-pareto">
-  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg> Pareto: Math Assistant</div>
+  <div class="panel-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,1 17,12 12,23 7,12"/></svg> Pareto: Math Assistant</div>
   <div class="pareto-wrap">
     <div class="pareto-topbar">
       <div class="pareto-status"><span class="pareto-dot" id="pareto-dot"></span><span id="pareto-status-text">Not loaded yet</span></div>
@@ -1561,7 +1573,13 @@ label.lbl{font-size:10px;color:#aaa;display:block;margin-bottom:3px;font-weight:
     </div>
     <div class="pareto-messages" id="pareto-messages">
       <div class="pareto-empty" id="pareto-empty">
-        Pareto is a tiny math reasoning model (LFM2‑350M‑Math) built as part of Calculator 2. Click <b>Load Pareto</b> to download and cache the model, then ask it anything. Once loaded, it also works fully offline.
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:#ddd;margin-bottom:4px">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z"/>
+          <path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/>
+          <path d="M8 4.5c0 .7-1 .9-1 1.6s1 .9 1 1.6" opacity="0.5"/>
+          <path d="M12 4.5c0 .7-1 .9-1 1.6s1 .9 1 1.6" opacity="0.5"/>
+          <path d="M16 4.5c0 .7-1 .9-1 1.6s1 .9 1 1.6" opacity="0.5"/>
+        </svg>
         <div class="pareto-examples">
           <div class="pareto-chip" onclick="paretoUseExample(this)">Solve 2x + 5 = 17 for x</div>
           <div class="pareto-chip" onclick="paretoUseExample(this)">Simplify √50</div>
@@ -3467,6 +3485,46 @@ function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+// LFM2's raw decode (with skip_special_tokens:false) includes literal
+// control-token text like <|im_end|>, <|cot_start|>, <|tool_call_start|>
+// etc. Strip anything in that family for display.
+function stripSpecialTokens(s){
+  return String(s).replace(/<\|[a-zA-Z0-9_]+\|>/g, '');
+}
+
+// Lightweight markdown + LaTeX renderer for Pareto's answers — handles
+// **bold**, *italic*, `code`, line breaks, and $...$ / $$...$$ math via
+// the KaTeX build already loaded for the rest of the calculator.
+function renderParetoMarkdown(raw){
+  // Extract math from the RAW text first — escaping HTML before pulling
+  // out $...$ segments would corrupt any LaTeX containing <, >, or &
+  // (e.g. limits, inequalities: "$a < b$") before KaTeX ever sees it.
+  const blocks = [], inlines = [];
+  let s = String(raw);
+  s = s.replace(/\$\$([\s\S]+?)\$\$/g, (m,expr)=>`\u0000MB${blocks.push(expr)-1}\u0000`);
+  s = s.replace(/\\\[([\s\S]+?)\\\]/g, (m,expr)=>`\u0000MB${blocks.push(expr)-1}\u0000`);
+  s = s.replace(/\$([^\$\n]+?)\$/g, (m,expr)=>`\u0000MI${inlines.push(expr)-1}\u0000`);
+  s = s.replace(/\\\(([\s\S]+?)\\\)/g, (m,expr)=>`\u0000MI${inlines.push(expr)-1}\u0000`);
+  // Now escape whatever prose is left (placeholders are plain ASCII/NUL
+  // markers with no HTML-special characters, so escaping leaves them intact).
+  s = escapeHtml(s);
+  s = s.replace(/\*\*([^\*]+?)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/__([^_]+?)__/g, '<strong>$1</strong>');
+  s = s.replace(/\*([^\*]+?)\*/g, '<em>$1</em>');
+  s = s.replace(/(?<![a-zA-Z0-9])_([^_]+?)_(?![a-zA-Z0-9])/g, '<em>$1</em>');
+  s = s.replace(/`([^`]+?)`/g, '<code>$1</code>');
+  s = s.replace(/\n{3,}/g,'\n\n').replace(/\n/g,'<br>');
+  s = s.replace(/\u0000MB(\d+)\u0000/g, (m,i)=>{
+    try{ return (typeof katex!=='undefined') ? katex.renderToString(blocks[i], {displayMode:true, throwOnError:false, strict:false}) : escapeHtml('$$'+blocks[i]+'$$'); }
+    catch(e){ return escapeHtml('$$'+blocks[i]+'$$'); }
+  });
+  s = s.replace(/\u0000MI(\d+)\u0000/g, (m,i)=>{
+    try{ return (typeof katex!=='undefined') ? katex.renderToString(inlines[i], {displayMode:false, throwOnError:false, strict:false}) : escapeHtml('$'+inlines[i]+'$'); }
+    catch(e){ return escapeHtml('$'+inlines[i]+'$'); }
+  });
+  return s;
+}
+
 async function loadParetoLib(){
   if(window.__paretoLib) return window.__paretoLib;
   const mod = await import(/* webpackIgnore: true */ PARETO_LIB_URL);
@@ -3519,10 +3577,65 @@ function appendParetoMessage(role, text, typing){
   return bubble;
 }
 
-function updateParetoMessage(bubble, text){
-  if(!bubble) return;
+// Builds (once) the reasoning/answer skeleton inside an assistant bubble,
+// replacing the typing-dots placeholder the first time content arrives.
+function paretoEnsureSkeleton(bubble){
+  if(bubble.dataset.skeleton) return {
+    details: bubble.querySelector('.pareto-think'),
+    thinkBody: bubble.querySelector('.pareto-think-body'),
+    answer: bubble.querySelector('.pareto-answer')
+  };
   bubble.classList.remove('typing');
-  bubble.textContent = text;
+  bubble.innerHTML = '';
+  const details = document.createElement('details');
+  details.className = 'pareto-think';
+  details.open = true;
+  const summary = document.createElement('summary');
+  summary.textContent = 'Thinking…';
+  const thinkBody = document.createElement('div');
+  thinkBody.className = 'pareto-think-body';
+  details.appendChild(summary);
+  details.appendChild(thinkBody);
+  const answer = document.createElement('div');
+  answer.className = 'pareto-answer';
+  bubble.appendChild(details);
+  bubble.appendChild(answer);
+  bubble.dataset.skeleton = '1';
+  return { details, thinkBody, answer };
+}
+
+// Renders the raw (special-tokens-included) accumulated text into the
+// bubble. `isFinal` controls what happens if no <|cot_end|> marker ever
+// shows up: mid-stream that just means "still thinking"; once generation
+// is actually done, it means this model produced no separate reasoning
+// step, so everything gets shown as the answer instead of being stuck
+// inside a "still thinking" box forever.
+function paretoRenderBubble(bubble, raw, isFinal){
+  const { details, thinkBody, answer } = paretoEnsureSkeleton(bubble);
+  const cleaned = raw.replace(/^\s*<\|cot_start\|>/, '');
+  const endIdx = cleaned.indexOf('<|cot_end|>');
+  if(endIdx !== -1){
+    const thinkPart = cleaned.slice(0, endIdx);
+    const answerPart = cleaned.slice(endIdx + '<|cot_end|>'.length).trim();
+    thinkBody.innerHTML = renderParetoMarkdown(stripSpecialTokens(thinkPart));
+    details.style.display = '';
+    if(isFinal || answerPart){ details.open = false; }
+    details.querySelector('summary').textContent = 'Show reasoning';
+    answer.innerHTML = answerPart
+      ? renderParetoMarkdown(stripSpecialTokens(answerPart))
+      : (isFinal ? '<span style="color:#999">(empty answer)</span>' : '');
+  } else if(!isFinal){
+    // Still generating, no split marker yet — show it all as live reasoning.
+    thinkBody.innerHTML = renderParetoMarkdown(stripSpecialTokens(cleaned));
+    details.style.display = '';
+    details.open = true;
+    answer.innerHTML = '';
+  } else {
+    // Generation finished and never produced a split marker — this
+    // response had no separate reasoning step, so show it all as the answer.
+    details.style.display = 'none';
+    answer.innerHTML = renderParetoMarkdown(stripSpecialTokens(cleaned)) || '<span style="color:#999">(empty answer)</span>';
+  }
   paretoScrollToBottom();
 }
 
@@ -3549,7 +3662,13 @@ function clearParetoChat(){
   paretoState.messages = [];
   const box = document.getElementById('pareto-messages');
   box.innerHTML = `<div class="pareto-empty" id="pareto-empty">
-        Pareto is a tiny math reasoning model (LFM2‑350M‑Math) that runs 100% locally in your browser via WebGPU — no data ever leaves your device. Click <b>Load Pareto</b> to download and cache the model, then ask it anything from algebra to calculus. Once loaded, it also works fully offline.
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:#ddd;margin-bottom:4px">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z"/>
+          <path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/>
+          <path d="M8 4.5c0 .7-1 .9-1 1.6s1 .9 1 1.6" opacity="0.5"/>
+          <path d="M12 4.5c0 .7-1 .9-1 1.6s1 .9 1 1.6" opacity="0.5"/>
+          <path d="M16 4.5c0 .7-1 .9-1 1.6s1 .9 1 1.6" opacity="0.5"/>
+        </svg>
         <div class="pareto-examples">
           <div class="pareto-chip" onclick="paretoUseExample(this)">Solve 2x + 5 = 17 for x</div>
           <div class="pareto-chip" onclick="paretoUseExample(this)">Simplify √50</div>
@@ -3572,8 +3691,6 @@ async function loadPareto(){
     // q4f16 needs GPU fp16 kernels; fall back to plain q4 on CPU/WASM.
     const dtype = hasWebGPU ? 'q4f16' : 'q4';
     paretoState.device = device;
-    const badge = document.getElementById('pareto-device-badge');
-    if(badge) badge.textContent = hasWebGPU ? 'WebGPU' : 'CPU (WASM)';
     const generator = await pipeline('text-generation', PARETO_MODEL_ID, {
       dtype, device,
       progress_callback: (p)=>{
@@ -3586,9 +3703,9 @@ async function loadPareto(){
     });
     paretoState.pipeline = generator;
     paretoState.TextStreamer = TextStreamer;
-    setParetoStatus('ready', 'Ready (' + (hasWebGPU ? 'WebGPU' : 'CPU') + ')');
+    setParetoStatus('ready', 'Ready (' + (hasWebGPU ? 'WebGPU' : 'CPU') + ') — cached for offline use');
     if(loadBtn){ loadBtn.textContent = 'Reload Model'; loadBtn.disabled = false; }
-    notify('Pareto is ready');
+    notify('Pareto is ready and cached for offline use');
   }catch(err){
     setParetoStatus('error', 'Failed to load: ' + err.message);
     if(loadBtn){ loadBtn.disabled = false; loadBtn.textContent = 'Load Pareto'; }
@@ -3616,36 +3733,45 @@ async function sendParetoMessage(){
   paretoState.messages.push({ role:'user', content:text });
 
   const bubble = appendParetoMessage('assistant', '', true);
-  let started = false;
-  let acc = '';
+  let raw = '';
 
   try{
+    // skip_special_tokens:false is required here — it's the only way to
+    // see the literal <|cot_start|> / <|cot_end|> markers LFM2 uses to
+    // separate its reasoning from its final answer, so we can render the
+    // reasoning as a collapsible section instead of dumping it straight
+    // into the answer.
     const streamer = new paretoState.TextStreamer(paretoState.pipeline.tokenizer, {
       skip_prompt: true,
-      skip_special_tokens: true,
+      skip_special_tokens: false,
       callback_function: (chunk)=>{
-        if(!started){ bubble.classList.remove('typing'); bubble.textContent=''; started = true; }
-        acc += chunk;
-        bubble.textContent = acc;
-        paretoScrollToBottom();
+        raw += chunk;
+        paretoRenderBubble(bubble, raw, false);
       }
     });
-    const output = await paretoState.pipeline(paretoState.messages, {
-      max_new_tokens: 640,
+    await paretoState.pipeline(paretoState.messages, {
+      // LFM2's reasoning traces can run long; too small a budget cuts
+      // the answer off before it ever appears. 2048 gives it enough
+      // room while still finishing in a reasonable time for a 350M model.
+      max_new_tokens: 2048,
       do_sample: true,
       temperature: 0.6,
       top_p: 0.95,
       repetition_penalty: 1.05,
       streamer
     });
-    const finalText = (output && output[0] && output[0].generated_text && output[0].generated_text.at(-1))
-      ? output[0].generated_text.at(-1).content
-      : acc;
-    updateParetoMessage(bubble, finalText || acc || '(no response)');
-    paretoState.messages.push({ role:'assistant', content: finalText || acc });
+    paretoRenderBubble(bubble, raw, true);
   }catch(err){
-    updateParetoMessage(bubble, 'Error: ' + err.message);
+    paretoEnsureSkeleton(bubble);
+    bubble.querySelector('.pareto-answer').innerHTML = 'Error: ' + escapeHtml(err.message);
   }
+
+  // Store only the final answer (not the reasoning) in history — keeps
+  // context small and matches how most reasoning-model chats work.
+  const cleanedFull = stripSpecialTokens(raw.replace(/^\s*<\|cot_start\|>/, ''));
+  const afterCot = raw.split('<|cot_end|>');
+  const finalAnswer = afterCot.length > 1 ? stripSpecialTokens(afterCot.slice(1).join('<|cot_end|>')).trim() : cleanedFull.trim();
+  paretoState.messages.push({ role:'assistant', content: finalAnswer || '(no response)' });
 
   if(sendBtn) sendBtn.disabled = false;
   paretoState.busy = false;
