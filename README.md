@@ -1,7 +1,5 @@
 # Calculator-2 / KC2
 Swiss Army Knife Calculator <br>
-Newest Calculator Major Update Since 1961's ANITA MK-8 <br>
-One Of The Most Powerful Open Source Unitized Calculators As Of 2026 <br>
 > Courtesy To Claude Sonnet 4.6 <br>
 Added Pareto - Math Assistant in the browser.
 # Web Version
